@@ -1,4 +1,4 @@
-import "bootstrap/dist/css/bootstrap.css"
+import "../static/css/all.css"
 import { createApp } from 'vue'
 import App from './App.vue'
 

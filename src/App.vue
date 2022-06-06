@@ -1,14 +1,16 @@
 <template>
-  <AddMeeting />
+  <div id="app">
+    <edit-meeting />
+  </div>
 </template>
 
 <script>
-import AddMeeting from './components/AddMeeting.vue'
+import EditMeeting from './components/EditMeeting.vue'
 
 export default {
   name: 'App',
   components: {
-    AddMeeting
+    EditMeeting
   }
 }
 </script>
