@@ -2,19 +2,19 @@
   <div class="d-flex justify-content-center align-items-center my-3">
     <div class="inner">
       <h6>案由</h6>
-      <input type="text">
+      <input class="discuss_subtitle " type="text">
       <h6>狀態</h6>
-      <select name="" id="">
+      <select class="discuss_subtitle " name="" id="">
         <option value="dicuss">討論中</option>
         <option value="execute">執行中</option>
         <option value="finish">結案</option>
       </select>
       <h6>內容</h6>
-      <textarea name="" id="" cols="20" rows="2"></textarea>
+      <textarea class="discuss_subtitle " name="" id="" cols="20" rows="2"></textarea>
       <h6>決策</h6>
-      <textarea name="" id="" cols="20" rows="2"></textarea>
+      <textarea class="discuss_subtitle " name="" id="" cols="20" rows="2"></textarea>
       <h6>執行</h6>
-      <textarea name="" id="" cols="20" rows="2"></textarea>
+      <textarea class="discuss_subtitle " name="" id="" cols="20" rows="2"></textarea>
     </div>
     <button id="delete" @click="$emit('minusDiscuss')">
       <i class=" bi bi-trash-fill"></i>
@@ -37,15 +37,23 @@ export default {
   padding: 0.5rem;
 }
 
-.inner input,
-.inner textarea,
-.inner select {
+.discuss_subtitle {
   width: 53vw;
+  margin: 0 0 0.5rem 0;
+  display: block;
+  border: 1px solid #ced4da;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.discuss_subtitle:focus {
+  border-color: #86b7fe;
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
 
 #delete {
-  border: none;
-  background-color: transparent;
+  width: 24px;
 }
 
 .bi-trash-fill {

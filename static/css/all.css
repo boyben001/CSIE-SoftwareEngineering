@@ -1,5 +1,10 @@
 *,
 *::before,
 *::after {
-  font-family: 'Noto Sans TC', sans-serif;
+  font-family: "Noto Sans TC";
+}
+
+button {
+  border: none;
+  background-color: transparent;
 }

@@ -1,16 +1,10 @@
 <template>
-  <div id="app">
-    <edit-meeting />
-  </div>
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/login">Login</router-link>
+  </nav>
+  <router-view />
 </template>
 
-<script>
-import EditMeeting from './components/EditMeeting.vue'
-
-export default {
-  name: 'App',
-  components: {
-    EditMeeting
-  }
-}
-</script>
+<style>
+</style>

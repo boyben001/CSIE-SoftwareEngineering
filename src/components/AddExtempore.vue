@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center">
-    <textarea name="" id="itemText" cols="20" rows="2" placeholder="內容"></textarea>
+    <textarea class="input_subtitle" name="" id="itemText" cols="20" rows="2" placeholder="內容"></textarea>
     <button id="delete" @click="$emit('minusExtempore')">
       <i class="bi bi-trash-fill"></i>
     </button>
