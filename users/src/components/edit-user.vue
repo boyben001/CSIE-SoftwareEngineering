@@ -32,96 +32,128 @@
       <br>
       <input type="text">
     </div>
+
     <div class="inner">
-      <label for="personrole">類別</label>
+      <label for="persontype">類別</label>
       <br>
-      <select name="" id="">
-        <option value="">請選擇</option>
-        <option value="dept-teach" id="dept-teach" >系上老師</option>
-        <div v-if="dept-teach === 'dept-teach'">
-             
-         <div class="inner">
-      <label for="">職稱</label>
-      <br>
-      <input type="text">
-    </div>
+      <select v-model = "persontype">
+        <option disabled value="">Please Choose</option>
+        <option id ="dept-teach">Department Teacher</option>
+        <option id="dept-assist">Department Assistant</option>
+        <option id="out-teach">Outside Teacher</option>
+        <option id="experts">Experts</option>
+        <option id="student">Students</option>
+      </select>
+
+      <div v-if="persontype=='Department Teacher'">
+        <div>
+        <label for="email">電子郵件</label>
+        <br>
+        <input type="text">
+        </div>
+      </div>
+      <div v-if="persontype=='Department Assistant'">
+        <div>
+        <label for="officephone">辦公室電話</label>
+        <br>
+        <input type="text">
+        </div>
+      </div>
+      <div v-if="persontype=='Outside Teacher'">
+        <div>
+        <label for="schoolname">學校名稱</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="deptname">系所名稱</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="jobtitle">職稱</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="officephone">辦公室電話</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="address">地址</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="bankaccount">銀行帳戶</label>
+        <br>
+        <input type="text">
+        </div>
+      </div>
+
+      <div v-if="persontype=='Experts'">
+        <div>
+        <label for="schoolname">公司名稱</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="jobtitle">職稱</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="officephone">辦公室電話</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="address">地址</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="bankaccount">銀行帳戶</label>
+        <br>
+        <input type="text">
+        </div>
+      </div>
+      <div v-if="persontype=='Students'">
+        <div>
+        <label for="studentid">學號</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="academicsystem">學制</label>
+        <br>
+        <input type="text">
+        </div>
+        <div>
+        <label for="year">年級</label>
+        <br>
+        <input type="text">
         </div>
         
-        <option value="dept-assist">系助理</option>
-        <option value="out-teach">校外老師</option>
-        <option value="experts">業界專家</option>
-        <option value="student">學生</option>
-      </select>
-    </div>
-    <div class="inner">
-      <label for="">職稱</label>
-      <br>
-      <input type="text">
-    </div>
-    <div class="inner">
-      <label for="">辦公室電話</label>
-      <br>
-      <input type="text">
-    </div>
-    
-  </div>
-  
+      </div>
+      </div>
   <button type="submit" class="btn btn-primary m-auto d-block" v-bind="submitForm">
     送出修改
   </button>
 
-  <form class="p-3">
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" class="form-control" id="name" placeholder="Joe Smith">
-  </div>
-  
-  <div class="form-group">
-    <label for="seeAnotherField">Do You Want To See Another Field?</label>
-    <select class="form-control" id="seeAnotherField">
-          <option value="no">No Way.</option>
-          <option value="yes">Absolutely!</option>
-    </select>
-  </div>
-  
-  <div class="form-group" id="otherFieldDiv">
-    <label for="otherField">Here you go!</label>
-    <select class="form-control" id="otherField">
-      <option>Yay</option>
-      <option>Woo</option>
-      <option>Hazah</option>
-      <option>Yipee</option>
-      <option>Hoorah</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label for="seeAnotherFieldGroup">Do You Want To See Another Group of Fields?</label>
-    <select class="form-control" id="seeAnotherFieldGroup">
-          <option value="no">Not Particularly.</option>
-          <option value="yes">I Guess!</option>
-    </select>
-  </div>
-  
-  <div class="form-group" id="otherFieldGroupDiv">
-    <div class="row">
-      <div class="col-6">
-        <label for="otherField1">Group: Heres One!</label>
-        <input type="text" class="form-control w-100" id="otherField1">
-      </div>
-      <div class="col-6">
-        <label for="otherField2">Group: Another One!</label>
-        <input type="text" class="form-control w-100" id="otherField2">
-      </div>
-    </div>
-  </div>
-  
-</form>
-
+</div>
 </template>
 
 <script>
+
 export default {
+  data() {
+    return {
+      persontype: ''
+      }
+    },
+
   name: 'editUserVue',
  
   methods:{
@@ -140,35 +172,43 @@ export default {
   }
 }
 
-$("#seeAnotherField").change(function() {
-  if ($(this).val() == "yes") {
-    $('#otherFieldDiv').show();
-    $('#otherField').attr('required', '');
-    $('#otherField').attr('data-error', 'This field is required.');
-  } else {
-    $('#otherFieldDiv').hide();
-    $('#otherField').removeAttr('required');
-    $('#otherField').removeAttr('data-error');
-  }
-});
-$("#seeAnotherField").trigger("change");
 
-$("#seeAnotherFieldGroup").change(function() {
-  if ($(this).val() == "yes") {
-    $('#otherFieldGroupDiv').show();
-    $('#otherField1').attr('required', '');
-    $('#otherField1').attr('data-error', 'This field is required.');
-    $('#otherField2').attr('required', '');
-    $('#otherField2').attr('data-error', 'This field is required.');
-  } else {
-    $('#otherFieldGroupDiv').hide();
-    $('#otherField1').removeAttr('required');
-    $('#otherField1').removeAttr('data-error');
-    $('#otherField2').removeAttr('required');
-    $('#otherField2').removeAttr('data-error');
-  }
-});
-$("#seeAnotherFieldGroup").trigger("change");
+// function show1(){
+//   document.getElementById('div1').style.display ='none';
+// }
+// function show2(){
+//   document.getElementById('div1').style.display = 'block';
+// }
+//   $("#seeAnotherField").change(function() {
+//   if ($(this).val() == "yes") {
+//     $('#otherFieldDiv').show();
+//     $('#otherField').attr('required', '');
+//     $('#otherField').attr('data-error', 'This field is required.');
+//   } else {
+//     $('#otherFieldDiv').hide();
+//     $('#otherField').removeAttr('required');
+//     $('#otherField').removeAttr('data-error');
+//   }
+// });
+// $("#seeAnotherField").trigger("change");
+
+// $("#seeAnotherFieldGroup").change(function() {
+//   if ($(this).val() == "yes") {
+//     $('#otherFieldGroupDiv').show();
+//     $('#otherField1').attr('required', '');
+//     $('#otherField1').attr('data-error', 'This field is required.');
+//     $('#otherField2').attr('required', '');
+//     $('#otherField2').attr('data-error', 'This field is required.');
+//   } else {
+//     $('#otherFieldGroupDiv').hide();
+//     $('#otherField1').removeAttr('required');
+//     $('#otherField1').removeAttr('data-error');
+//     $('#otherField2').removeAttr('required');
+//     $('#otherField2').removeAttr('data-error');
+//   }
+// });
+// $("#seeAnotherFieldGroup").trigger("change");
+
 
 
 

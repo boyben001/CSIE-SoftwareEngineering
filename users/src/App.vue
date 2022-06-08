@@ -1,18 +1,20 @@
 <template>
-  <!-- <editUserVue /> -->
+  <editUserVue />
   
-  <person-details/>
+  <!-- <person-details/> -->
 </template>
 
 <script>
-//import editUserVue from './components/edit-user.vue'
-import PersonDetails from './components/person-details.vue'
+import editUserVue from './components/edit-user.vue'
+//import PersonDetails from './components/person-details.vue'
 
 export default {
+
+
   name: 'App',
   components: {
-    // editUserVue
-    PersonDetails
+    editUserVue
+    // PersonDetails
   }
 }
 </script>
