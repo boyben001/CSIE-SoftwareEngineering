@@ -45,7 +45,7 @@
         <br>
         <select class="input_subtitle">
           <option value="">請選擇</option>
-          <option :value="person" v-for="person in chair" :key="person.id">
+          <option :value="person" v-for="person in people" :key="person.id">
             {{ person.name }} ({{ person.email }}) {{ person.status }}
           </option>
         </select>
@@ -62,7 +62,7 @@
         <br>
         <select class="input_subtitle" @click="no_chair()">
           <option value="choose" selected>請選擇</option>
-          <option v-for="person in chair" :key="person.id">
+          <option v-for="person in people" :key="person.id">
             {{ person.name }} ({{ person.email }}) {{ person.status }}
           </option>
         </select>
@@ -72,7 +72,7 @@
         <br>
         <select class="input_subtitle">
           <option value="choose" selected>請選擇</option>
-          <option v-for="person in chair" :key="person.id">
+          <option v-for="person in people" :key="person.id">
             {{ person.name }} ({{ person.email }}) {{ person.status }}
           </option>
         </select>
@@ -136,7 +136,7 @@ export default defineComponent({
       countDiscuss: 0,
       countReport: 0,
       countExtempore: 0,
-      chair: [
+      people: [
         {
           id: 1,
           name: '路婉婷',

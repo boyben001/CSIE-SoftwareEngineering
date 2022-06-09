@@ -1,39 +1,39 @@
 <template>
-  <ul class="nav flex-column">
-    <button class="nav-item">
-      <a class="nav-link" href="#">
-        <img src="../assets/icon/menu.png" alt="" style="width: 50px;">
-      </a>
+  <div class="d-flex align-items-start" style="padding-top: 100px;border-right: 1px solid #ced4da;">
+    <ul class="nav flex-column">
+      <button class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="bi bi-plus-circle-dotted" style="font-size: 48px; color: green"></i>
+        </a>
+      </button>
+      <button class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="bi bi-card-list" style="font-size: 48px;"></i>
+        </a>
+      </button>
+      <button class="nav-item">
+        <a class="nav-link" href="#">
+          <img src="../assets/icon/decisionTrack.png" alt="" style="width: 48px;">
+        </a>
+      </button>
+      <button class="nav-item">
+        <a class="nav-link" href="#">
+          <img src="../assets/icon/personList.png" alt="" style="width: 48px;">
+        </a>
+      </button>
+    </ul>
+    <button>
+      <i class="bi bi-caret-left-fill" style="font-size: 24px;"></i>
     </button>
-    <button class="nav-item">
-      <a class="nav-link" href="#">
-        <img src="../assets/icon/addMeeting.png" alt="" style="width: 50px;">
-      </a>
-    </button>
-    <button class="nav-item">
-      <a class="nav-link" href="#">
-        <img src="../assets/icon/listMeeting.png" alt="" style="width: 50px;">
-      </a>
-    </button>
-    <button class="nav-item">
-      <a class="nav-link" href="#">
-        <img src="../assets/icon/decisionTrack.png" alt="" style="width: 50px;">
-      </a>
-    </button>
-    <button class="nav-item">
-      <a class="nav-link" href="#">
-        <img src="../assets/icon/personList.png" alt="" style="width: 50px;">
-      </a>
-    </button>
-  </ul>
+  </div>
 </template>
 
-<script>
-</script>
 
-<style>
-.nav {
-  border-right: 1px solid #ced4da;
+<style scoped>
+.nav-item {
+  height: 70px;
+  display: flex;
+  align-items: center;
 }
 
 .nav-item:hover {

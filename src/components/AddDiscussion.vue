@@ -1,67 +1,51 @@
 <template>
-  <div class="d-flex justify-content-center align-items-center my-3">
-    <div class="inner">
-      <h6>案由</h6>
-      <input class="discuss_subtitle " type="text">
-      <h6>狀態</h6>
-      <select class="discuss_subtitle " name="" id="">
-        <option value="dicuss">討論中</option>
-        <option value="execute">執行中</option>
-        <option value="finish">結案</option>
-      </select>
-      <h6>內容</h6>
-      <textarea class="discuss_subtitle " name="" id="" cols="20" rows="2"></textarea>
-      <h6>決策</h6>
-      <textarea class="discuss_subtitle " name="" id="" cols="20" rows="2"></textarea>
-      <h6>執行</h6>
-      <textarea class="discuss_subtitle " name="" id="" cols="20" rows="2"></textarea>
-    </div>
-    <button id="delete" @click="$emit('minusDiscuss')">
-      <i class=" bi bi-trash-fill"></i>
-    </button>
-  </div>
+  <n-card title="討論事項" hoverable style="margin: 15px 0">
+    <n-form ref="formRef" :model="dynamicForm" :style="{ maxWidth: '100%' }">
+      <n-form-item v-for="(item, index) in dynamicForm.discussions" :key="index" :label="`事項編號 - ${index + 1}`"
+        :path="`discussions[${index}].discussion`">
+        <n-input v-model:value="item.discussion" placeholder="" maxlength="50" show-count clearable type="textarea"
+          :autosize="{
+            minRows: 2,
+            maxRows: 3
+          }" />
+        <n-button style="margin-left: 12px" @click="removeItem(index)">
+          Remove
+        </n-button>
+      </n-form-item>
+    </n-form>
+    <n-button attr-type="button" @click="addItem">
+      新增討論事項
+    </n-button>
+  </n-card>
+
 </template>
 
 <script>
-export default {
-  props: {
-    amountDiscuss: Number
-  },
-  emits: ['minusDiscuss'],
-}
+import { defineComponent, reactive, ref } from "vue";
+
+export default defineComponent({
+  setup() {
+    const formRef = ref(null);
+
+    const dynamicForm = reactive({
+      discussions: [{ discussion: "" }]
+    });
+
+    const removeItem = (index) => {
+      dynamicForm.discussions.splice(index, 1);
+    };
+
+    const addItem = () => {
+      dynamicForm.discussions.push({ report: "" });
+    };
+
+    return {
+      formRef,
+      dynamicForm,
+      addItem,
+      removeItem
+    };
+  }
+});
 </script>
 
-<style>
-.inner {
-  border: 1px solid #ced4da;
-  padding: 0.5rem;
-}
-
-.discuss_subtitle {
-  width: 53vw;
-  margin: 0 0 0.5rem 0;
-  display: block;
-  border: 1px solid #ced4da;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.discuss_subtitle:focus {
-  border-color: #86b7fe;
-  outline: none;
-  box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
-}
-
-#delete {
-  width: 24px;
-}
-
-.bi-trash-fill {
-  color: #92979c;
-  font-size: 24px;
-}
-
-.bi-trash-fill:hover {
-  color: #ff0000;
-}
-</style>
