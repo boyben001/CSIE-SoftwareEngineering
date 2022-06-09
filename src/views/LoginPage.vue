@@ -3,15 +3,41 @@
     <div class=" outer d-flex justify-content-center align-items-center flex-column">
       <h2 class="mb-5 login_title">高雄大學資工系會議管理系統</h2>
       <div class="form-floating mb-3 d-flex flex-column align-items-center">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput">Email address</label>
-        <button type="button" class="login_btn btn btn-outline-primary mt-4">登入</button>
+        <n-auto-complete v-model:value="value" :input-props="{
+          autocomplete: 'disabled'
+        }" :options="options" placeholder="Email" />
+        <n-button class="login_btn" tertiary type="primary">
+          登入
+        </n-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { defineComponent, ref, computed } from "vue";
+import { NButton } from 'naive-ui'
+
+export default defineComponent({
+  components: {
+    NButton
+  },
+  setup() {
+    const valueRef = ref("");
+    return {
+      value: valueRef,
+      options: computed(() => {
+        return ["@gmail.com", "@yahooo.com.tw", "@mail.nuk.edu.tw"].map((suffix) => {
+          const prefix = valueRef.value.split("@")[0];
+          return {
+            label: prefix + suffix,
+            value: prefix + suffix
+          };
+        });
+      })
+    };
+  }
+});
 </script>
 
 <style>
@@ -32,6 +58,7 @@
 }
 
 .login_btn {
+  margin: 20px 0;
   width: 150px;
 }
 </style>

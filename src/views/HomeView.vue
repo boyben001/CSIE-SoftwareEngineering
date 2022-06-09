@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex">
       <MenuBar />
       <div class="showComponent w-100">
         <NavBar />

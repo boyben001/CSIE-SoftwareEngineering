@@ -7,14 +7,14 @@
     <n-tag :bordered="false" style="font-weight: bold; margin-bottom: 20px; font-size: 28px;">
       會議資訊
     </n-tag>
-    <n-form-item label="標題" path="inputValue">
-      <n-input v-model:value="model.inputValue" placeholder="" maxlength="20" show-count clearable />
+    <n-form-item label="標題" path="title">
+      <n-input v-model:value="model.title" placeholder="" maxlength="20" show-count clearable />
     </n-form-item>
-    <n-form-item label="時間" path="datetimeValue">
-      <n-date-picker v-model:value="model.datetimeValue" placeholder="" type="datetime" />
+    <n-form-item label="時間" path="time">
+      <n-date-picker v-model:value="model.time" placeholder="" type="datetime" />
     </n-form-item>
-    <n-form-item label="地點" path="inputValue">
-      <n-input v-model:value="model.inputValue" placeholder="" maxlength="30" show-count clearable />
+    <n-form-item label="地點" path="place">
+      <n-input v-model:value="model.place" placeholder="" maxlength="30" show-count clearable />
     </n-form-item>
     <n-form-item label="類型" path="selectMeeting">
       <n-select v-model:value="model.selectMeeting" placeholder="" :options="meetingType" />
@@ -29,18 +29,15 @@
     <n-form-item label="紀錄" path="admin">
       <n-select v-model:value="model.admin" disabled />
     </n-form-item>
-    <n-form-item label="與會者" path="multipleSelectPeople">
-      <n-select v-model:value="model.multipleSelectPeople" placeholder="" :options="people" multiple />
-    </n-form-item>
-    <n-form-item label="列席" path="multipleSelectPeople">
-      <n-select v-model:value="model.multipleSelectPeople" placeholder="" :options="people" multiple />
+    <n-form-item label="與會者" path="attendee">
+      <n-select v-model:value="model.attendee" placeholder="" :options="people" multiple />
     </n-form-item>
     <!-- ---------------------------------------------------------- -->
     <n-tag :bordered="false" style="font-weight: bold; margin-bottom: 20px; font-size: 28px;">
       會議內容
     </n-tag>
-    <n-form-item label="主席致詞" path="textareaValue">
-      <n-input v-model:value="model.textareaValue" placeholder="" maxlength="100" show-count clearable type="textarea"
+    <n-form-item label="主席致詞" path="chairSay">
+      <n-input v-model:value="model.chairSay" placeholder="" maxlength="100" show-count clearable type="textarea"
         :autosize="{
           minRows: 2,
           maxRows: 3
@@ -63,8 +60,8 @@
       </n-upload-dragger>
     </n-upload>
     <!-- ---------------------------------------------------------- -->
-    <div style="display: flex; justify-content: center">
-      <n-button round type="primary" @click="handleValidateButtonClick">
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <n-button round type="primary" @click="handleValidateButtonClick" style=" width: 150px; padding: 10px;">
         新增會議
       </n-button>
     </div>
@@ -128,12 +125,17 @@ export default defineComponent({
         value: String
       })),
       rules: {
-        inputValue: {
+        title: {
           required: true,
           trigger: ["blur", "input"],
           message: "必填欄位"
         },
-        textareaValue: {
+        place: {
+          required: true,
+          trigger: ["blur", "input"],
+          message: "必填欄位"
+        },
+        chairSay: {
           required: true,
           trigger: ["blur", "input"],
           message: "必填欄位"
@@ -148,13 +150,13 @@ export default defineComponent({
           trigger: ["blur", "change"],
           message: "必填欄位"
         },
-        multipleSelectPeople: {
+        attendee: {
           type: "array",
           required: true,
           trigger: ["blur", "change"],
           message: "至少選取一位"
         },
-        datetimeValue: {
+        time: {
           type: "number",
           required: true,
           trigger: ["blur", "change"],

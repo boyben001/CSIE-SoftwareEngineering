@@ -1,43 +1,68 @@
 <template>
-  <div class="d-flex align-items-start" style="padding-top: 100px;border-right: 1px solid #ced4da;">
-    <ul class="nav flex-column">
-      <button class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="bi bi-plus-circle-dotted" style="font-size: 48px; color: green"></i>
-        </a>
-      </button>
-      <button class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="bi bi-card-list" style="font-size: 48px;"></i>
-        </a>
-      </button>
-      <button class="nav-item">
-        <a class="nav-link" href="#">
-          <img src="../assets/icon/decisionTrack.png" alt="" style="width: 48px;">
-        </a>
-      </button>
-      <button class="nav-item">
-        <a class="nav-link" href="#">
-          <img src="../assets/icon/personList.png" alt="" style="width: 48px;">
-        </a>
-      </button>
-    </ul>
-    <button>
-      <i class="bi bi-caret-left-fill" style="font-size: 24px;"></i>
-    </button>
-  </div>
+  <n-space vertical>
+    <n-layout has-sider style="height: 100vh;">
+      <n-layout-sider bordered collapse-mode="width" :collapsed-width="100" :width="180" :collapsed="collapsed"
+        show-trigger @collapse="collapsed = true" @expand="collapsed = false">
+        <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="100" :collapsed-icon-size="28"
+          :options="menuOptions" />
+      </n-layout-sider>
+    </n-layout>
+  </n-space>
 </template>
 
+<script>
+import { defineComponent, h, ref } from "vue";
+import { NIcon } from "naive-ui";
+import {
+  AddCircle as AddMeeting,
+  ListCircleSharp as MeetingList,
+  BarChartSharp as DiscussionList,
+  Person as PersonList
+} from "@vicons/ionicons5";
 
-<style scoped>
-.nav-item {
-  height: 70px;
-  display: flex;
-  align-items: center;
+function renderIcon(icon) {
+  return () => h(NIcon, null, { default: () => h(icon) });
 }
 
-.nav-item:hover {
-  background-color: rgb(13 110 253 / 25%);
+const menuOptions = [
+  {
+    label: "新增會議",
+    key: "addMeeting",
+    icon: renderIcon(AddMeeting)
+  },
+  {
+    label: "會議列表",
+    key: "meetingList",
+    icon: renderIcon(MeetingList),
+  },
+  {
+    label: "決策追蹤",
+    key: "discussionList",
+    icon: renderIcon(DiscussionList)
+  },
+  {
+    label: "人員列表",
+    key: "personList",
+    icon: renderIcon(PersonList),
+  }
+];
+
+export default defineComponent({
+  setup() {
+    return {
+      activeKey: ref(null),
+      collapsed: ref(true),
+      menuOptions
+    };
+  }
+});
+</script>
+
+<style>
+.n-layout-toggle-button {
+  font-size: 28px !important;
+  width: 35px !important;
+  height: 35px !important;
+  right: 10px !important;
 }
 </style>
-
