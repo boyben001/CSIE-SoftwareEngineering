@@ -1,7 +1,7 @@
 <template>
   <n-form ref="formRef" :model="model" :rules="rules" label-placement="left" require-mark-placement="right-hanging"
     :size="size" label-width="auto" :style="{
-      maxWidth: '90%'
+      maxWidth: '100%'
     }" style="padding: 5% 10% ;">
 
     <n-tag :bordered="false" style="font-weight: bold; margin-bottom: 20px; font-size: 28px;">
@@ -179,3 +179,10 @@ export default defineComponent({
 
 });
 </script>
+
+<style>
+form {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+</style>
