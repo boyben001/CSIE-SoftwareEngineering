@@ -1,9 +1,9 @@
 <template>
   <n-space vertical>
     <n-layout has-sider style="height: 100vh;">
-      <n-layout-sider bordered collapse-mode="width" :collapsed-width="100" :width="180" :collapsed="collapsed"
+      <n-layout-sider bordered collapse-mode="width" :collapsed-width="80" :width="150" :collapsed="collapsed"
         show-trigger @collapse="collapsed = true" @expand="collapsed = false">
-        <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="100" :collapsed-icon-size="28"
+        <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
           :options="menuOptions" />
       </n-layout-sider>
     </n-layout>
