@@ -6,9 +6,12 @@
         <n-auto-complete v-model:value="value" :input-props="{
           autocomplete: 'disabled'
         }" :options="options" placeholder="Email" />
-        <n-button class="login_btn" tertiary type="primary">
-          登入
-        </n-button>
+        <router-link to="/home">
+          <n-button class="login_btn" tertiary type="primary">
+            登入
+          </n-button>
+        </router-link>
+
       </div>
     </div>
   </div>
@@ -60,5 +63,9 @@ export default defineComponent({
 .login_btn {
   margin: 20px 0;
   width: 150px;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

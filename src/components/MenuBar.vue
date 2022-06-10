@@ -3,8 +3,28 @@
     <n-layout has-sider style="height: 100vh;">
       <n-layout-sider bordered collapse-mode="width" :collapsed-width="80" :width="150" :collapsed="collapsed"
         show-trigger @collapse="collapsed = true" @expand="collapsed = false">
-        <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
-          :options="menuOptions" />
+
+        <!-- first icon -->
+        <router-link to="/newConf">
+          <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
+            :options="menuOptions0" />
+        </router-link>
+        <!-- second icon -->
+        <router-link to="/listConf">
+          <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
+            :options="menuOptions1" />
+        </router-link>
+        <!-- third icon -->
+        <router-link to="/decisionTrack">
+          <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
+            :options="menuOptions2" />
+        </router-link>
+        <!-- fourth icon -->
+        <router-link to="/memberList">
+          <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
+            :options="menuOptions3" />
+        </router-link>
+
       </n-layout-sider>
     </n-layout>
   </n-space>
@@ -24,22 +44,28 @@ function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) });
 }
 
-const menuOptions = [
+const menuOptions0 = [
   {
     label: "新增會議",
     key: "addMeeting",
-    icon: renderIcon(AddMeeting)
-  },
+    icon: renderIcon(AddMeeting),
+  }
+];
+const menuOptions1 = [
   {
     label: "會議列表",
     key: "meetingList",
     icon: renderIcon(MeetingList),
-  },
+  }
+];
+const menuOptions2 = [
   {
     label: "決策追蹤",
     key: "discussionList",
-    icon: renderIcon(DiscussionList)
-  },
+    icon: renderIcon(DiscussionList),
+  }
+];
+const menuOptions3 = [
   {
     label: "人員列表",
     key: "personList",
@@ -52,7 +78,10 @@ export default defineComponent({
     return {
       activeKey: ref(null),
       collapsed: ref(true),
-      menuOptions
+      menuOptions0,
+      menuOptions1,
+      menuOptions2,
+      menuOptions3,
     };
   }
 });

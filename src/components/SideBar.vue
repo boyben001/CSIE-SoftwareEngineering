@@ -1,25 +1,36 @@
 <template>
     <div class="nav-outer-container">
         <!-- <DeletePersonAlert :deletedname="name" /> -->
-        <!-- <SideBarMeet /> -->
-        <!-- <SideBarContentDecission /> -->
-        <SideBarContentPerson />
+        <div v-if="msg == 'meet'">
+            <SideBarContentMeet />
+        </div>
+        <div v-if="msg == 'decision'">
+            <SideBarContentDecission />
+        </div>
+        <div v-if="msg == 'person'">
+            <SideBarContentPerson />
+        </div>
     </div>
 </template>
 
 <script>
 // import DeletePersonAlert from "./DeletePersonAlert.vue";
-// import SideBarMeet from "@/components/SideBarContent-meet.vue"
-// import SideBarContentDecission from "@/components/SideBarContent-decission.vue";
+import SideBarContentMeet from "./SideBarContent-meet.vue";
 import SideBarContentPerson from "@/components/SideBarContent-person.vue";
+import SideBarContentDecission from "./SideBarContent-decission.vue";
 
 export default {
     name: "NavBar",
+    props: {
+        msg: String
+    },
     components: {
         // DeletePersonAlert,
         // SideBarMeet,
         // SideBarContentDecission,
-        SideBarContentPerson
+        SideBarContentPerson,
+        SideBarContentDecission,
+        SideBarContentMeet
     },
 };
 </script>
