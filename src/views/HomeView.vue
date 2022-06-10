@@ -15,6 +15,7 @@
                   <!-- <SideBar /> -->
                   <!-- <MeetingDetail /> -->
                   <!-- <DecisionDetail /> -->
+                  <!-- <PersonDetail /> -->
                 </div>
               </n-dialog-provider>
             </n-notification-provider>
@@ -33,6 +34,7 @@ import AddMeeting from '@/components/AddMeeting.vue'
 import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
 // import MeetingDetail from "@/components/MeetingDetail.vue";
 // import DecisionDetail from "@/components/DecisionDetail.vue";
+// import PersonDetail from "@/components/PersonDetails.vue";
 // import SideBar from "@/components/SideBar.vue";
 
 export default defineComponent({
@@ -49,7 +51,8 @@ export default defineComponent({
     // ==============
     // SideBar,
     // MeetingDetail,
-    // DecisionDetail
+    // DecisionDetail,
+    // PersonDetail
   }
 });
 </script>

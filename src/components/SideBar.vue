@@ -32,6 +32,7 @@ export default {
     width: 290px;
     border-right: 1px solid #ccc;
     overflow-y: auto;
+    overflow-x: hidden;
     max-height: 100vh;
     display: none;
 }
