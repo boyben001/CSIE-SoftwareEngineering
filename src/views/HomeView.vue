@@ -48,6 +48,7 @@ export default defineComponent({
     // ==============
     SideBar,
     MeetingDetail,
+    // DecisionDetail
   }
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="nav-outer-container">
+    <div class="nav-outer-container d-lg-block">
         <!-- <DeletePersonAlert :deletedname="name" /> -->
         <!-- <SideBarMeet /> -->
         <!-- <SideBarContentDecission /> -->
@@ -33,5 +33,6 @@ export default {
     border-right: 1px solid #ccc;
     overflow-y: auto;
     max-height: 100vh;
+    display: none;
 }
 </style>

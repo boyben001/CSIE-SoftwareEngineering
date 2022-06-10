@@ -1,6 +1,9 @@
 <template>
-    <div class="vertical-align p-5 w-100">
-        <!-- <SendButtonGroup /> -->
+    <div class="vertical-align px-3 w-100">
+        <div class="d-flex justify-content-end mb-3">
+            <SendButtonGroup />
+            <EditDeleteButton />
+        </div>
         <h1 style="text-align: center; margin-bottom: 30px">{{ conference.title }}</h1>
         <div class="my-2">時間: {{ conference.time }}</div>
         <div class="my-2">地點: {{ conference.place }}
@@ -51,11 +54,13 @@
 </template>
 
 <script>
-// import SendButtonGroup from './Send-ButtonGroup.vue';
+import SendButtonGroup from './Send-ButtonGroup.vue';
+import EditDeleteButton from './Edit-Delete-Button.vue';
 export default {
     name: "MeetingDetail",
     components: {
-        // SendButtonGroup
+        SendButtonGroup,
+        EditDeleteButton
     },
     props: {
         msg: String

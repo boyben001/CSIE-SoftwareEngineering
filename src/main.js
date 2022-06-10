@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.css"
+import "../static/css/all.css"
 import { createApp } from 'vue'
 import naive from "naive-ui";
 import App from './App.vue'

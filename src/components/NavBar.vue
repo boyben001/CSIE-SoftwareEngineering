@@ -3,7 +3,7 @@
     <div class="navbar_title">
       會議管理系統
     </div>
-    <button class="myInfo" style="display: block">
+    <button class="myInfo">
       <img src="../assets/icon/myself.png" alt="" style="width: 30px;">
     </button>
   </div>
