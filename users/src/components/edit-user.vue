@@ -46,6 +46,7 @@
       </select>
 
       <div v-if="persontype=='Department Teacher'">
+      <br>
         <div>
         <label for="email">電子郵件</label>
         <br>
@@ -53,6 +54,7 @@
         </div>
       </div>
       <div v-if="persontype=='Department Assistant'">
+      <br>
         <div>
         <label for="officephone">辦公室電話</label>
         <br>
@@ -60,6 +62,7 @@
         </div>
       </div>
       <div v-if="persontype=='Outside Teacher'">
+      <br>
         <div>
         <label for="schoolname">學校名稱</label>
         <br>
@@ -93,7 +96,8 @@
       </div>
 
       <div v-if="persontype=='Experts'">
-        <div>
+      <br>
+      <div>
         <label for="schoolname">公司名稱</label>
         <br>
         <input type="text">
@@ -120,6 +124,7 @@
         </div>
       </div>
       <div v-if="persontype=='Students'">
+      <br>
         <div>
         <label for="studentid">學號</label>
         <br>
@@ -138,16 +143,24 @@
         
       </div>
       </div>
-  <button type="submit" class="btn btn-primary m-auto d-block" v-bind="submitForm">
+
+
+  <n-button type="info" class="btn btn-primary m-auto d-block" v-bind="submitForm">
     送出修改
-  </button>
+  </n-button>
 
 </div>
 </template>
 
 <script>
+import { NButton } from 'naive-ui'
+
 
 export default {
+  components: {
+    NButton
+  },
+
   data() {
     return {
       persontype: ''
@@ -161,55 +174,12 @@ export default {
       this.name = ''
       this.phone =''
       this.email =''
-      this.personrole =''
-      
-
+      this.personrole =''     
     },
 
     submitForm(){
-
+        
     }
   }
 }
-
-
-// function show1(){
-//   document.getElementById('div1').style.display ='none';
-// }
-// function show2(){
-//   document.getElementById('div1').style.display = 'block';
-// }
-//   $("#seeAnotherField").change(function() {
-//   if ($(this).val() == "yes") {
-//     $('#otherFieldDiv').show();
-//     $('#otherField').attr('required', '');
-//     $('#otherField').attr('data-error', 'This field is required.');
-//   } else {
-//     $('#otherFieldDiv').hide();
-//     $('#otherField').removeAttr('required');
-//     $('#otherField').removeAttr('data-error');
-//   }
-// });
-// $("#seeAnotherField").trigger("change");
-
-// $("#seeAnotherFieldGroup").change(function() {
-//   if ($(this).val() == "yes") {
-//     $('#otherFieldGroupDiv').show();
-//     $('#otherField1').attr('required', '');
-//     $('#otherField1').attr('data-error', 'This field is required.');
-//     $('#otherField2').attr('required', '');
-//     $('#otherField2').attr('data-error', 'This field is required.');
-//   } else {
-//     $('#otherFieldGroupDiv').hide();
-//     $('#otherField1').removeAttr('required');
-//     $('#otherField1').removeAttr('data-error');
-//     $('#otherField2').removeAttr('required');
-//     $('#otherField2').removeAttr('data-error');
-//   }
-// });
-// $("#seeAnotherFieldGroup").trigger("change");
-
-
-
-
 </script>

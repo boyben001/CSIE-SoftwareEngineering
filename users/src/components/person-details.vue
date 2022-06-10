@@ -10,8 +10,7 @@
         <div>({{basicdata.persontype}})</div>
     </div>
 
-    <div class="lower">
-    <div>
+    <div class="left-side">
         <br>
         <div class="big-word">基本資料:</div>
         <hr>
@@ -19,7 +18,9 @@
             <div>手機: {{ basicdata.phone }}</div>
             <div>電子郵件: {{ basicdata.email }}</div>
             <br>
-        
+    </div>
+    <div class="right-side">
+    <br>
         <div class="big-word">詳細資料:</div>
         <hr>
         <div v-if="basicdata.persontype=='系上老師'">
@@ -27,7 +28,7 @@
             <div>辦公室電話: {{ moredetails.officephone }}</div>
         </div>
 
-        <div v-if="basicdata.persontype=='系助理'"></div>
+        <div v-if="basicdata.persontype=='系助理'">
             <div>辦公室電話: {{ moredetails.officephone }}</div>
         </div>
 
@@ -52,8 +53,8 @@
             <div>學號: {{ moredetails.studentid }}</div>
             <div>學制: {{ moredetails.academicsystem }}</div>
             <div>年級: {{ moredetails.year }}</div>
-        </div>
-    </div>     
+    </div>
+</div>
 </template>
 
 <script>
@@ -116,9 +117,21 @@ export default {
     text-align: left;
 }
 
+.left-side {
+    float: left;
+    width: 50%;
+}
+
+.right-side {
+    
+    float: left;
+    width: 50%;
+}
+
 .big-word {
     font-weight: bold;
     font-size: large;
+    text-align: center;
 }
 
 .median-word {

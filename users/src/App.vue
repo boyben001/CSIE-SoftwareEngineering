@@ -5,8 +5,9 @@
 </template>
 
 <script>
+
 import editUserVue from './components/edit-user.vue'
-//import PersonDetails from './components/person-details.vue'
+// import PersonDetails from './components/person-details.vue'
 
 export default {
 
