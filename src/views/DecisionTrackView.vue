@@ -9,6 +9,10 @@
             <n-notification-provider>
               <n-dialog-provider>
                 <!-- ============================== -->
+                <div class="d-flex justify-content-start">
+                  <SideBar msg="decision" />
+                  <DecisionDetail />
+                </div>
               </n-dialog-provider>
             </n-notification-provider>
           </n-message-provider>
@@ -23,17 +27,20 @@ import { defineComponent } from "vue";
 import MenuBar from '@/components/MenuBar.vue'
 import NavBar from '@/components/NavBar.vue'
 import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
-
+import DecisionDetail from "@/components/DecisionDetail.vue";
+import SideBar from "@/components/SideBar.vue";
 
 export default defineComponent({
-  name: 'HomeView',
+  name: 'DecisionTrackView',
   components: {
     NLoadingBarProvider,
     NNotificationProvider,
     NDialogProvider,
     NMessageProvider,
     MenuBar,
-    NavBar
+    NavBar,
+    SideBar,
+    DecisionDetail,
   }
 });
 </script>
