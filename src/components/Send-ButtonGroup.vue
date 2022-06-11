@@ -19,7 +19,7 @@
     </n-button-group>
 </template>
 
-<script lang="ts">
+<script>
 import { NButton, NButtonGroup } from 'naive-ui'
 import { CommentNote20Regular, Send20Regular } from '@vicons/fluent'
 import { defineComponent } from 'vue'

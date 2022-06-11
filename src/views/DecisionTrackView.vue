@@ -11,7 +11,7 @@
                 <!-- ============================== -->
                 <div class="d-flex justify-content-start">
                   <SideBar msg="decision" />
-                  <DecisionDetail></DecisionDetail>
+                  <DecisionDetail />
                 </div>
               </n-dialog-provider>
             </n-notification-provider>
