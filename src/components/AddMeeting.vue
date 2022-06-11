@@ -1,9 +1,8 @@
 <template>
   <n-form ref="formRef" :model="model" :rules="rules" label-placement="left" require-mark-placement="right-hanging"
     :size="size" label-width="auto" :style="{
-      maxWidth: '90%'
+      maxWidth: '100%'
     }" style="padding: 5% 10% ;">
-
     <n-tag :bordered="false" style="font-weight: bold; margin-bottom: 20px; font-size: 28px;">
       會議資訊
     </n-tag>
@@ -20,9 +19,20 @@
       <n-select v-model:value="model.selectMeeting" placeholder="" :options="meetingType" />
     </n-form-item>
     <!-- ---------------------------------------------------------- -->
-    <n-tag :bordered="false" style="font-weight: bold; margin-bottom: 20px; font-size: 28px;">
-      與會人員
-    </n-tag>
+    <div class="d-flex justify-content-between">
+      <n-tag :bordered="false" style="font-weight: bold; margin-bottom: 20px; font-size: 28px;">
+        與會人員
+      </n-tag>
+      <n-button attr-type="button" @click="showModal = true">
+        新增人員
+      </n-button>
+      <n-modal v-model:show="showModal" preset="dialog" title="新增人員" positive-text="新增" negative-text="取消"
+        @positive-click="submitCallback" @negative-click="cancelCallback" style="width: 50vw">
+        <n-card hoverable>
+          <AddUser></AddUser>
+        </n-card>
+      </n-modal>
+    </div>
     <n-form-item label="主席" path="selectChair">
       <n-select v-model:value="model.selectChair" placeholder="" :options="people" />
     </n-form-item>
@@ -83,11 +93,11 @@ import {
   NButton,
   NForm
 } from "naive-ui";
+import AddUser from "./AddUser.vue"
 import AddReport from './AddReport.vue'
 import AddDiscussion from './AddDiscussion.vue'
 import AddExtempore from './AddExtempore.vue'
 import { ArchiveOutline as ArchiveIcon } from '@vicons/ionicons5'
-
 export default defineComponent({
   components: {
     NInput,
@@ -96,6 +106,7 @@ export default defineComponent({
     NDatePicker,
     NButton,
     NForm,
+    AddUser,
     AddReport,
     AddDiscussion,
     AddExtempore,
@@ -116,6 +127,13 @@ export default defineComponent({
         multipleSelectPeople: null,
         datetimeValue: null,
       }),
+      showModal: ref(false),
+      cancelCallback() {
+        message.success("作業取消");
+      },
+      submitCallback() {
+        message.success("新增完成");
+      },
       meetingType: ["系務會議", "系教評會", "系課程委員會", "招生暨學生事務委員會", "系發展協會"].map((String) => ({
         label: String,
         value: String
@@ -176,6 +194,11 @@ export default defineComponent({
       }
     };
   },
-
 });
 </script>
+<style>
+form {
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+</style>

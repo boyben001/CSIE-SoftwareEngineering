@@ -11,7 +11,7 @@
                 <!-- ============================== -->
                 <div class="d-flex justify-content-start">
                   <SideBar msg="person" />
-
+                  <PersonDetail />
                 </div>
               </n-dialog-provider>
             </n-notification-provider>
@@ -29,6 +29,7 @@ import NavBar from '@/components/NavBar.vue'
 import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
 // import 
 import SideBar from "@/components/SideBar.vue";
+import PersonDetail from "@/components/PersonDetail.vue";
 
 export default defineComponent({
   name: 'ListMemberView',
@@ -40,6 +41,7 @@ export default defineComponent({
     MenuBar,
     NavBar,
     SideBar,
+    PersonDetail
   }
 });
 </script>

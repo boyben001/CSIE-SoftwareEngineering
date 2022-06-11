@@ -20,7 +20,7 @@
             :options="menuOptions2" />
         </router-link>
         <!-- fourth icon -->
-        <router-link to="/memberList">
+        <router-link to="/listMember">
           <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="80" :collapsed-icon-size="28"
             :options="menuOptions3" />
         </router-link>
