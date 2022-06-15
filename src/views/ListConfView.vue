@@ -11,7 +11,9 @@
                 <!-- ============================== -->
                 <div class="d-flex justify-content-start">
                   <SideBar msg="meet" />
-                  <MeetingDetail />
+                  <!-- <router-view class="meetingDetail" name="a"></router-view> -->
+                  <!-- <div>{{ confId }}</div> -->
+                  <MeetingDetail :msg=confId />
                 </div>
               </n-dialog-provider>
             </n-notification-provider>
@@ -29,6 +31,8 @@ import NavBar from '@/components/NavBar.vue'
 import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
 import MeetingDetail from "@/components/MeetingDetail.vue";
 import SideBar from "@/components/SideBar.vue";
+import { useRoute } from "vue-router";
+import { computed } from "@vue/reactivity";
 
 export default defineComponent({
   name: 'ListConfView',
@@ -41,6 +45,14 @@ export default defineComponent({
     NavBar,
     SideBar,
     MeetingDetail
+  },
+  setup() {
+    const route = useRoute();
+    const confId = computed(() => route.params.confId)
+
+    return {
+      confId
+    }
   }
 });
 </script>

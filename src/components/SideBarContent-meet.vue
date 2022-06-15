@@ -1,13 +1,15 @@
 <template>
     <!-- First section -->
-    <div class="nav-content" v-for="(meet, index) in meets" :key=index>
-        <h3 class="nav-main-section-header">{{ meet.name }}</h3>
-        <ul class="tags">
-            <li><a href="#" class="tag">{{ meet.type }}</a></li>
-            <li><a href="#" class="tag">{{ meet.time }}</a></li>
-        </ul>
-        <!-- Break for another section -->
-        <hr />
+    <div class="nav-content" v-for="meet in meets" :key=meet.id>
+        <router-link :to="{ name: 'meetingDetail', params: { confId: meet.id } }">
+            <h3 class="nav-main-section-header">{{ meet.name }}</h3>
+            <ul class="tags">
+                <li><a href="#" class="tag">{{ meet.type }}</a></li>
+                <li><a href="#" class="tag">{{ meet.time }}</a></li>
+            </ul>
+            <!-- Break for another section -->
+            <hr />
+        </router-link>
     </div>
 </template>
 
@@ -17,19 +19,19 @@ export default {
     data() {
         return {
             meets: [
-                { name: '111年校務會議', type: '校務會議', time: '6月1號 14:00' },
-                { name: '112年校務會議', type: '校務會議', time: '6月2號 14:00' },
-                { name: '113年校務會議', type: '校務會議', time: '6月3號 14:00' },
-                { name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
-                { name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
-                { name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
-                { name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
-                { name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
+                { id: 1, name: '111年校務會議', type: '校務會議', time: '6月1號 14:00' },
+                { id: 2, name: '112年校務會議', type: '校務會議', time: '6月2號 14:00' },
+                { id: 3, name: '113年校務會議', type: '校務會議', time: '6月3號 14:00' },
+                { id: 4, name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
+                { id: 5, name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
+                { id: 6, name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
+                { id: 7, name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
+                { id: 8, name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
+                { id: 9, name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
+                { id: 10, name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
+                { id: 11, name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
+                { id: 12, name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
+                { id: 13, name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
             ],
         };
     },
