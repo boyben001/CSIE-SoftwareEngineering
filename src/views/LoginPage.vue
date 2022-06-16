@@ -9,7 +9,6 @@
         <n-button class="login_btn" tertiary type="primary" @click="handleLogin">
           登入
         </n-button>
-
       </div>
     </div>
   </div>
@@ -19,6 +18,7 @@
 import { defineComponent, ref, computed } from "vue";
 import { NButton } from 'naive-ui'
 import Cookies from 'js-cookie'
+import axios from 'axios'
 
 export default defineComponent({
   components: {
@@ -38,7 +38,7 @@ export default defineComponent({
     return {
       value: valueRef,
       options: computed(() => {
-        return ["@gmail.com", "@yahooo.com.tw", "@mail.nuk.edu.tw"].map((suffix) => {
+        return ["@gmail.com", "@yahooo.com.tw", "@mail.nuk.edu.tw", "@example.com"].map((suffix) => {
           const prefix = valueRef.value.split("@")[0];
           return {
             label: prefix + suffix,
@@ -49,12 +49,32 @@ export default defineComponent({
     };
   },
   methods: {
-    handleLogin() {
-      const token = 'asds32adsavrAS3Fadf5567' // token本身就是加密過的字串，隨意
+    async handleLogin() {
+      //const token = 'asds32adsavrAS3Fadf5567' // token本身就是加密過的字串，隨意
       let usermail = this.value
+
+      await axios({
+        method: 'post',
+        url: 'http://127.0.0.1:8000/login',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'multipart/form-data'
+        }, 
+        data: {
+          'username': usermail
+        }
+      })
+        .then((response)=>{
+            this.loginForm.token = response.data.access_token
+            console.log('success', response)
+            console.log(this.loginForm)
+        })
+        .catch((error)=>{
+            console.log('errorrr', error.response.data)
+        })
+
       // 帳號密碼需驗證不能為空
       if (usermail !== '') {
-        this.loginForm.token = token
         this.loginForm.usermail = usermail
       } else {
         alert('帳號密碼不能為空')
@@ -70,6 +90,8 @@ export default defineComponent({
       // cookie當中有token被設置才能改變路由
       if (Cookies.get('login') && this.loginForm.token) {
         this.$router.push({name: 'home'})
+      }else{
+        alert('帳號不存在')
       }
     },
     
