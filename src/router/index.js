@@ -47,7 +47,22 @@ const routes = [
   {
     path: '/listConf/:confId',
     name: 'meetingDetail',
-    component: ListConfView
+    component: ListConfView,
+    meta: { requireAuth: true }
+  },
+  // get id of decision
+  {
+    path: '/decisionTrack/:deciId',
+    name: 'decisionDetail',
+    component: DecisionTrackView,
+    meta: { requireAuth: true }
+  },
+  // get id of member
+  {
+    path: '/listMember/:membId',
+    name: 'personDetail',
+    component: ListMemberView,
+    meta: { requireAuth: true }
   }
 ]
 

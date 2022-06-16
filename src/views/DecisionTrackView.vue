@@ -11,7 +11,7 @@
                 <!-- ============================== -->
                 <div class="d-flex justify-content-start">
                   <SideBar msg="decision" />
-                  <DecisionDetail />
+                  <DecisionDetail :msg=deciId />
                 </div>
               </n-dialog-provider>
             </n-notification-provider>
@@ -29,6 +29,8 @@ import NavBar from '@/components/NavBar.vue'
 import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
 import DecisionDetail from "@/components/DecisionDetail.vue";
 import SideBar from "@/components/SideBar.vue";
+import { useRoute } from "vue-router";
+import { computed } from "@vue/reactivity";
 
 export default defineComponent({
   name: 'DecisionTrackView',
@@ -41,6 +43,14 @@ export default defineComponent({
     NavBar,
     SideBar,
     DecisionDetail,
+  },
+  setup() {
+    const route = useRoute();
+    const deciId = computed(() => route.params.deciId)
+
+    return {
+      deciId
+    }
   }
 });
 </script>

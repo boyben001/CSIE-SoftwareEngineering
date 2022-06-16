@@ -11,7 +11,7 @@
                 <!-- ============================== -->
                 <div class="d-flex justify-content-start">
                   <SideBar msg="person" />
-                  <PersonDetail />
+                  <PersonDetail :msg=membId />
                 </div>
               </n-dialog-provider>
             </n-notification-provider>
@@ -27,9 +27,10 @@ import { defineComponent } from "vue";
 import MenuBar from '@/components/MenuBar.vue'
 import NavBar from '@/components/NavBar.vue'
 import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
-// import 
 import SideBar from "@/components/SideBar.vue";
 import PersonDetail from "@/components/PersonDetail.vue";
+import { useRoute } from "vue-router";
+import { computed } from "@vue/reactivity";
 
 export default defineComponent({
   name: 'ListMemberView',
@@ -42,6 +43,14 @@ export default defineComponent({
     NavBar,
     SideBar,
     PersonDetail
+  },
+  setup() {
+    const route = useRoute();
+    const membId = computed(() => route.params.membId)
+
+    return {
+      membId
+    }
   }
 });
 </script>

@@ -11,8 +11,6 @@
                 <!-- ============================== -->
                 <div class="d-flex justify-content-start">
                   <SideBar msg="meet" />
-                  <!-- <router-view class="meetingDetail" name="a"></router-view> -->
-                  <!-- <div>{{ confId }}</div> -->
                   <MeetingDetail :msg=confId />
                 </div>
               </n-dialog-provider>
