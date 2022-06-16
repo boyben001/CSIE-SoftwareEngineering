@@ -1,14 +1,14 @@
 <template>
 
     <!-- First section -->
-    <div class="nav-content" v-for="attendee in attendees" :key=attendee.id>
-        <router-link :to="{ name: 'personDetail', params: { membId: attendee.id } }">
+    <div class="nav-content" v-for="(attendee, index) in attendees" :key=index>
+        <router-link :to="{ name: 'personDetail', params: { membId: index+1 } }">
             <div class="topic">
                 <h3 class="nav-main-section-header">{{ attendee.name }}</h3>
                 <n-tag round :color="{ color: '#d4d5d6', textColor: '#555', borderColor: '#555' }" size="small"
-                    class="statusButton">{{ attendee.identity }}</n-tag>
+                    class="statusButton">{{ attendee.type }}</n-tag>
             </div>
-            <div class="mail">{{ attendee.mail }}</div>
+            <div class="mail">{{ attendee.email }}</div>
             <!-- Break for another section -->
             <hr />
         </router-link>
@@ -18,22 +18,44 @@
 
 <script>
 import { NTag } from 'naive-ui';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
 export default {
     name: "NavBarContent-person",
     data() {
         return {
-            attendees: [
-                { id: 1, name: '陳鼎元', identity: '教師', mail: 'a1085520@mail.nuk.edu.tw' },
-                { id: 2, name: '廖健棚', identity: '學生', mail: 'a1085503@mail.nuk.edu.tw' },
-                { id: 3, name: '黃慶源', identity: '校外教師', mail: 'a1085523@mail.nuk.edu.tw' },
-                { id: 4, name: '高銘宏', identity: '業界專家', mail: 'a1085533@mail.nuk.edu.tw' },
-                { id: 5, name: '柳翰揚', identity: '系助理', mail: 'a1085513@mail.nuk.edu.tw' },
-                { id: 6, name: '吳嘉欣', identity: '學生', mail: 'a1085526@mail.nuk.edu.tw' },
-            ],
+            attendees: [{}]
         };
     },
     components: {
         NTag
+    },
+    methods:{
+        async getAllPerson(){
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            if (info){
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'get',
+                    url: 'http://127.0.0.1:8000/person/',
+                    headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    }, 
+                })
+                .then((response)=>{
+                    console.log('success', response)
+                    this.attendees = response.data
+                    console.log('attendees:', this.attendees)
+                })
+            }
+        }
+    },
+    async mounted(){
+        await this.getAllPerson();
     }
 };
 </script>

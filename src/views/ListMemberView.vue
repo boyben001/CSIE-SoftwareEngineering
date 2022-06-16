@@ -51,6 +51,6 @@ export default defineComponent({
     return {
       membId
     }
-  }
+  },
 });
 </script>
