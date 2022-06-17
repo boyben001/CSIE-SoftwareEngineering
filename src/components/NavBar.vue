@@ -1,22 +1,46 @@
 <template>
-  <div class="d-flex justify-content-between w-100 px-3 py-1" style="border-bottom: 1px solid #ced4da;">
-    <router-link to="./home">
+  <n-space justify="space-between" class="navbar">
+    <router-link to="./home" style="text-decoration:none;">
       <div class="navbar_title">
+        <img class="navbar_icon" src="../assets/icon/csie-logo.png" alt="">
         會議管理系統
       </div>
     </router-link>
-    <router-link to="./">
-      <button class="myInfo" style="display: block">
-        <img src="../assets/icon/myself.png" alt="" style="width: 30px;">
-      </button>
+    <router-link to="./" class="navbar_avatar">
+      <n-avatar round :style="{
+        color: 'white',
+        backgroundColor: 'purple'
+      }">
+        嗨嗨
+      </n-avatar>
     </router-link>
-  </div>
+  </n-space>
 </template>
 
-<style>
+<style scoped>
+.navbar{
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
 .navbar_title {
+  margin-left: 15px;
+  color: rgb(52, 220, 150);
   font-weight: bold;
   font-size: 28px;
   text-align: center;
+}
+
+.navbar_icon {
+  width: 32px;
+  font-size: 28px;
+  text-align: center;
+}
+
+.navbar_avatar {
+  margin-top: 4px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
