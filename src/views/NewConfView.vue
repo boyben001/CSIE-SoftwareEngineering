@@ -1,36 +1,19 @@
 <template>
-  <div class="home">
-    <n-loading-bar-provider>
-      <n-message-provider>
-        <n-notification-provider>
-          <n-dialog-provider>
-            <AddMeeting />
-          </n-dialog-provider>
-        </n-notification-provider>
-      </n-message-provider>
-    </n-loading-bar-provider>
-  </div>
+  <n-layout>
+    <n-scrollbar style="max-height: 100%; padding: 0% 5% " trigger="none">
+      <AddMeeting />
+    </n-scrollbar>
+  </n-layout>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import AddMeeting from '@/components/AddMeeting.vue'
-import { NMessageProvider, NLoadingBarProvider, NNotificationProvider, NDialogProvider } from 'naive-ui'
+import AddMeeting from '@/components/AddMeetingForm.vue'
 
 export default defineComponent({
   name: 'newConf',
   components: {
-    NLoadingBarProvider,
-    NNotificationProvider,
-    NDialogProvider,
-    NMessageProvider,
     AddMeeting
   }
 });
 </script>
-
-<style>
-.d-flex justify-content-start {
-  overflow-y: auto;
-}
-</style>

@@ -1,17 +1,15 @@
 <template>
   <n-space vertical size="large">
     <n-layout>
-      <n-layout-header>
+      <n-layout-header bordered>
         <Header />
       </n-layout-header>
-      <n-layout has-sider style="height: 93.3vh">
-        <Sidebar />
-        <n-layout content-style="padding-left: 24px;">
-          <n-scrollbar style="max-height: 93.3vh">
-            <Content />
-          </n-scrollbar>
+      <n-layout-content>
+        <n-layout has-sider style="height: 93vh">
+          <Sidebar />
+          <Content />
         </n-layout>
-      </n-layout>
+      </n-layout-content>
     </n-layout>
   </n-space>
 </template>

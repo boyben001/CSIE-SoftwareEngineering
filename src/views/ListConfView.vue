@@ -1,8 +1,8 @@
 <template>
-  <div class="d-flex justify-content-start">
+  <n-layout has-sider style="height: 93.1vh">
     <SideBar msg="meet" />
     <MeetingDetail />
-  </div>
+  </n-layout>
 </template>
 
 <script>

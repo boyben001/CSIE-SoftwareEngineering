@@ -1,5 +1,3 @@
 <template>
-  <n-layout-content>
-    <router-view />
-  </n-layout-content>
+  <router-view></router-view>
 </template>
