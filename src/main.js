@@ -1,10 +1,10 @@
-import "bootstrap/dist/css/bootstrap.css"
 import { createApp } from 'vue'
 import naive from "naive-ui";
 import App from './App.vue'
 import router from './router'
 
+const app = createApp(App)
 
-createApp(App).use(router).use(naive).mount('#app')
-
-import "bootstrap/dist/js/bootstrap.js"
+app.use(router)
+app.use(naive)
+app.mount('#app')

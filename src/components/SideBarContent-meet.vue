@@ -1,38 +1,70 @@
 <template>
     <!-- First section -->
     <div class="nav-content" v-for="(meet, index) in meets" :key=index>
-        <h3 class="nav-main-section-header">{{ meet.name }}</h3>
-        <ul class="tags">
-            <li><a href="#" class="tag">{{ meet.type }}</a></li>
-            <li><a href="#" class="tag">{{ meet.time }}</a></li>
-        </ul>
-        <!-- Break for another section -->
-        <hr />
+        <router-link :to="{ name: 'meetingDetail', params: { confId: index+1 } }">
+            <h3 class="nav-main-section-header">{{ meet.title }}</h3>
+            <ul class="tags">
+                <li><a href="#" class="tag">{{ meet.type }}</a></li>
+                <li><a href="#" class="tag">{{ meet.time }}</a></li>
+            </ul>
+            <!-- Break for another section -->
+            <hr />
+        </router-link>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
 export default {
     name: "NavBarContent-meet",
     data() {
         return {
-            meets: [
-                { name: '111年校務會議', type: '校務會議', time: '6月1號 14:00' },
-                { name: '112年校務會議', type: '校務會議', time: '6月2號 14:00' },
-                { name: '113年校務會議', type: '校務會議', time: '6月3號 14:00' },
-                { name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
-                { name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
-                { name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
-                { name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
-                { name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
-                { name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
-            ],
+            // meets: [
+            //     { id: 1, name: '111年校務會議', type: '校務會議', time: '6月1號 14:00' },
+            //     { id: 2, name: '112年校務會議', type: '校務會議', time: '6月2號 14:00' },
+            //     { id: 3, name: '113年校務會議', type: '校務會議', time: '6月3號 14:00' },
+            //     { id: 4, name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
+            //     { id: 5, name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
+            //     { id: 6, name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
+            //     { id: 7, name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
+            //     { id: 8, name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
+            //     { id: 9, name: '114年校務會議', type: '校務會議', time: '6月4號 14:00' },
+            //     { id: 10, name: '115年校務會議', type: '校務會議', time: '6月5號 14:00' },
+            //     { id: 11, name: '116年校務會議', type: '校務會議', time: '6月6號 14:00' },
+            //     { id: 12, name: '117年校務會議', type: '校務會議', time: '6月6號 14:00' },
+            //     { id: 13, name: '118年校務會議', type: '校務會議', time: '6月6號 14:00' },
+            // ],
+            meets: [{}]
         };
     },
+    methods:{
+        async getCurrentMeeting(){
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            if (info){
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'get',
+                    url: 'http://127.0.0.1:8000/meeting/',
+                    headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    }, 
+                })
+                .then((response)=>{
+                    console.log('success', response)
+                    this.meets = response.data
+                    console.log('attendees:', this.Meets)
+                })
+            }
+        }
+    },
+    async mounted(){
+        await this.getCurrentMeeting();
+    }
 };
 </script>
 

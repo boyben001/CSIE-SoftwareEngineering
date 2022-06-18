@@ -1,19 +1,21 @@
 <template>
     <!-- First section -->
-    <div class="nav-content" v-for="(decission, index) in decissions" :key=index>
-        <div class="topic">
-            <h3 class="nav-main-section-header">{{ decission.name }}</h3>
-            <n-tag type="info" class="statusButton" v-if="decission.status == '討論中'">{{ decission.status }}</n-tag>
-            <n-tag type="warning" class="statusButton" v-else-if="decission.status == '執行中'">{{ decission.status }}
-            </n-tag>
-            <n-tag type="success" class="statusButton" v-else-if="decission.status == '已完成'">{{ decission.status }}
-            </n-tag>
-        </div>
-        <ul class="tags">
-            <li><a href="#" class="tag">{{ decission.meet }}</a></li>
-        </ul>
-        <!-- Break for another section -->
-        <hr />
+    <div class="nav-content" v-for="decission in decissions" :key=decission.id>
+        <router-link :to="{ name: 'decisionDetail', params: { deciId: decission.id } }">
+            <div class="topic">
+                <h3 class="nav-main-section-header">{{ decission.name }}</h3>
+                <n-tag type="info" class="statusButton" v-if="decission.status == '討論中'">{{ decission.status }}</n-tag>
+                <n-tag type="warning" class="statusButton" v-else-if="decission.status == '執行中'">{{ decission.status }}
+                </n-tag>
+                <n-tag type="success" class="statusButton" v-else-if="decission.status == '已完成'">{{ decission.status }}
+                </n-tag>
+            </div>
+            <ul class="tags">
+                <li><a href="#" class="tag">{{ decission.meet }}</a></li>
+            </ul>
+            <!-- Break for another section -->
+            <hr />
+        </router-link>
     </div>
 
 </template>
@@ -25,15 +27,15 @@ export default {
     data() {
         return {
             decissions: [
-                { name: '111年工院盃舉行', status: '討論中', meet: '111年校務會議' },
-                { name: '112年工院盃舉行', status: '討論中', meet: '112年校務會議' },
-                { name: '113年工院盃舉行', status: '執行中', meet: '113年校務會議' },
-                { name: '114年工院盃舉行', status: '已完成', meet: '114年校務會議' },
-                { name: '115年工院盃舉行', status: '討論中', meet: '115年校務會議' },
-                { name: '116年工院盃舉行', status: '執行中', meet: '116年校務會議' },
-                { name: '117年工院盃舉行', status: '討論中', meet: '117年校務會議' },
-                { name: '118年工院盃舉行', status: '討論中', meet: '118年校務會議' },
-                { name: '119年工院盃舉行', status: '討論中', meet: '119年校務會議' },
+                { id: 1, name: '111年工院盃舉行', status: '討論中', meet: '111年校務會議' },
+                { id: 2, name: '112年工院盃舉行', status: '討論中', meet: '112年校務會議' },
+                { id: 3, name: '113年工院盃舉行', status: '執行中', meet: '113年校務會議' },
+                { id: 4, name: '114年工院盃舉行', status: '已完成', meet: '114年校務會議' },
+                { id: 5, name: '115年工院盃舉行', status: '討論中', meet: '115年校務會議' },
+                { id: 6, name: '116年工院盃舉行', status: '執行中', meet: '116年校務會議' },
+                { id: 7, name: '117年工院盃舉行', status: '討論中', meet: '117年校務會議' },
+                { id: 8, name: '118年工院盃舉行', status: '討論中', meet: '118年校務會議' },
+                { id: 9, name: '119年工院盃舉行', status: '討論中', meet: '119年校務會議' },
             ],
         };
     },
