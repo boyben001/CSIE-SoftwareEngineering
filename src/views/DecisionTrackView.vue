@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-start">
     <SideBar msg="decision" />
-    <DecisionDetail />
+    <DecisionDetail :deciId=deciId />
   </div>
 
 </template>

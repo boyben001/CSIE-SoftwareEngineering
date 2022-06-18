@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-start">
     <SideBar msg="person" />
-    <PersonDetail />
+    <PersonDetail :membId=membId />
   </div>
 
 </template>
