@@ -20,13 +20,13 @@
 import { defineComponent } from "vue";
 import Header from './HeaderBlock.vue'
 import Sidebar from './SidebarBlock.vue'
-// import Content from './ContentBlock.vue'
+import Content from './ContentBlock.vue'
 
 export default defineComponent({
   components: {
     Header,
     Sidebar,
-    // Condtent
+    Content
   }
 });
 </script>

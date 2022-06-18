@@ -1,70 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginPage from '../views/LoginPage.vue'
-import NewConfView from '../views/NewConfView'
-import DecisionTrackView from '../views/DecisionTrackView'
-import ListMemberView from '../views/ListMemberView'
-import ListConfView from '../views/ListConfView'
+import routes from './router'
 import Cookies from 'js-cookie'
 
-const routes = [
-  {
-    path: '/home',
-    name: 'home',
-    component: HomeView,
-    meta: { requireAuth: true }
-  },
-  {
-    path: '/',
-    name: 'login',
-    component: LoginPage
-  },
-  {
-    path: '/newConf',
-    name: 'newConf',
-    component: NewConfView,
-    meta: { requireAuth: true }
-  },
-  {
-    path: '/listConf',
-    name: 'listConf',
-    component: ListConfView,
-    meta: { requireAuth: true }
-  },
-  {
-    path: '/decisionTrack',
-    name: 'decisionTrack',
-    component: DecisionTrackView,
-    meta: { requireAuth: true }
-  },
-  {
-    path: '/listMember',
-    name: 'listMember',
-    component: ListMemberView,
-    meta: { requireAuth: true }
-  },
-  // get id of conference
-  {
-    path: '/listConf/:confId',
-    name: 'meetingDetail',
-    component: ListConfView,
-    meta: { requireAuth: true }
-  },
-  // get id of decision
-  {
-    path: '/decisionTrack/:deciId',
-    name: 'decisionDetail',
-    component: DecisionTrackView,
-    meta: { requireAuth: true }
-  },
-  // get id of member
-  {
-    path: '/listMember/:membId',
-    name: 'personDetail',
-    component: ListMemberView,
-    meta: { requireAuth: true }
-  }
-]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
