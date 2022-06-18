@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-start">
     <SideBar msg="meet" />
-    <MeetingDetail />
+    <MeetingDetail :confId=confId />
   </div>
 </template>
 

@@ -1,6 +1,7 @@
 <template>
+    <h1>Decision ID ={{ deciId }}</h1>
     <div v-for="deci in decisions" :key=deci.discuss_matters.id>
-        <div v-if="deci.discuss_matters.id == msg" class="d-flex flex-column p-4 w-100">
+        <div v-if="deci.discuss_matters.id == deciId" class="d-flex flex-column p-4 w-100">
             <h2 class="my-5">{{ deci.discuss_matters.reason }}</h2>
             <div>會議: {{ deci.conference_title }}</div>
             <div class="mb-5">狀態: {{ deci.discuss_matters.state }}</div>
@@ -26,7 +27,8 @@ import { defineComponent } from "vue";
 export default defineComponent({
     name: "DecisionDetail",
     props: {
-        msg: Number
+        msg: Number,
+        deciId: Number,
     },
     data() {
         return {
