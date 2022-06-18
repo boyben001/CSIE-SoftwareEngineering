@@ -1,16 +1,19 @@
 <template>
-  <n-h2 style="--font-size: 60px; --font-weight: 100">
-    高雄大學資工系會議管理系統
-  </n-h2>
-  <n-card size="large" style="--padding-bottom: 30px">
-    <n-auto-complete v-model:value="value" :input-props="{
-          autocomplete: 'disabled'
-        }" :options="options" placeholder="Email" />
-    <n-button tertiary type="primary" @click="handleLogin">
-      登入
-    </n-button>
-  <br>
-  </n-card>
+  <n-space vertical style="align-items: center; padding-top:5vh">
+    <img style="width:25vh" src="..\assets\icon\csie-logo.png" />
+    <n-h2 style="--font-size: 60px; --font-weight: 100">
+      高雄大學資工系會議管理系統
+    </n-h2>
+    <n-card size="large" style="width:25vw">
+      <n-auto-complete v-model:value="value" :input-props="{
+        autocomplete: 'disabled'
+      }" :options="options" placeholder="Email" />
+      <n-button tertiary type="primary" @click="handleLogin">
+        登入
+      </n-button>
+      <br>
+    </n-card>
+  </n-space>
 </template>
 
 <script>
@@ -24,7 +27,7 @@ export default defineComponent({
     NButton
   },
   data() {
-    return{
+    return {
       loginForm: {
         usermail: '',
         token: ''
@@ -58,18 +61,18 @@ export default defineComponent({
         headers: {
           accept: 'application/json',
           'Content-Type': 'multipart/form-data'
-        }, 
+        },
         data: {
           'username': usermail
         }
       })
-        .then((response)=>{
-            this.loginForm.token = response.data.access_token
-            console.log('success', response)
-            console.log(this.loginForm)
+        .then((response) => {
+          this.loginForm.token = response.data.access_token
+          console.log('success', response)
+          console.log(this.loginForm)
         })
-        .catch((error)=>{
-            console.log('errorrr', error.response.data)
+        .catch((error) => {
+          console.log('errorrr', error.response.data)
         })
 
       // 帳號密碼需驗證不能為空
@@ -80,20 +83,20 @@ export default defineComponent({
       }
 
       var date = new Date();
-      date.setTime(date.getTime()+(10*60*1000)); //十分鐘後 cookie 會過期
+      date.setTime(date.getTime() + (10 * 60 * 1000)); //十分鐘後 cookie 會過期
       console.log(date)
-      
+
       Cookies.set('login', JSON.stringify(this.loginForm), { expires: date })
       console.log(this.loginForm)
-      
+
       // cookie當中有token被設置才能改變路由
       if (Cookies.get('login') && this.loginForm.token) {
-        this.$router.push({name: 'home'})
-      }else{
+        this.$router.push({ name: 'home' })
+      } else {
         alert('帳號不存在')
       }
     },
-    
+
     // 將Cookies清除的測試用button事件
     removeCookie() {
       Cookies.remove('login')
@@ -105,18 +108,19 @@ export default defineComponent({
 
 <style scoped>
 .n-h2 {
-  margin: 20vh auto 20px;
   text-align: center;
   letter-spacing: 5px;
   opacity: 0.8;
 }
+
 .n-card {
   margin: 0 auto;
-  text-align: center;  
+  text-align: center;
   max-width: 380px;
   flex-wrap: wrap;
   box-shadow: var(--box-shadow);
 }
+
 .n-button {
   margin-top: 20px;
   width: 50%;
