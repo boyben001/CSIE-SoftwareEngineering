@@ -172,6 +172,10 @@
                 </n-upload-dragger>
             </n-upload>
         </n-form-item>
+
+        <n-button type="success" @click="createMeet">
+            確定新增會議
+        </n-button>
     </n-form>
 
     <pre>{{ JSON.stringify(model, null, 2) }}
@@ -181,6 +185,8 @@
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import { ArchiveOutline as ArchiveIcon } from "@vicons/ionicons5";
+import Cookies from 'js-cookie'
+import axios from 'axios'
 
 export default defineComponent({
     components: {
@@ -368,6 +374,61 @@ export default defineComponent({
             removeMotion,
             addMotion,
         };
-    }
+    },
+    methods: {
+        async createMeet() {
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            const url = 'http://127.0.0.1:8000/meeting/'
+            if (info) {
+                const token = JSON.parse(info).token
+                this.model.attendee_association = [
+                    {
+                        "person_id": 0,
+                        "is_present": true,
+                        "is_confirmed": false,
+                        "is_member": true,
+                    }
+                ]
+                this.model["chair_speech"] = "nooooooo"
+                this.model["chair_confirmed"] = true
+                console.log('showwwwww', this.model)
+                await axios({
+                    method: 'post',
+                    url: url,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                    data: {
+                        'request': JSON.stringify(this.model, null, 2),
+                        'files': []
+                    }
+                })
+                .then((response) => {
+                    console.log('success', response)
+                    //this.member = response.data
+                    //console.log('members:', this.members)
+                })
+                .catch((error) => {
+                    console.log('errorrr', error.response.data)
+                })
+            }
+        },
+        changeAttendeeAssociation(value){
+            value = 2
+            this.model.attendee_association = [
+                {
+                    "person_id": 0,
+                    "is_present": true,
+                    "is_confirmed": false,
+                    "is_member": true,
+                }
+            ]
+            console.log('showwwwww', this.model)
+            return value
+        }
+    },
 });
 </script>
