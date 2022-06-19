@@ -34,8 +34,8 @@
         <n-form-item label="紀錄" path="minute_taker_id">
             <n-select v-model:value="model.minute_taker_id" placeholder="選擇一項" :options="personOptions" />
         </n-form-item>
-        <n-form-item label="與會人員" path="attendee_association">
-            <n-select v-model:value="model.attendee_association" placeholder="選擇多項" :options="personOptions" multiple />
+        <n-form-item label="與會人員" path="attendees">
+            <n-select v-model:value="model.attendees" placeholder="選擇多項" :options="personOptions" multiple />
         </n-form-item>
 
         <n-divider />
@@ -192,7 +192,23 @@ export default defineComponent({
     components: {
         ArchiveIcon
     },
+    mounted(){
+        const allPersonNames = ["Alice", "Ben", "Jack"];
+        allPersonNames.push("Ken")
+        this.personOptions = allPersonNames.map((v, i) => ({
+            label: v,
+            value: i+1
+        }));
+    },
+    data(){
+        return{
+            personOptions: []
+        }
+    },
     setup() {
+        const allPersonNames = ["Alice", "Ben", "Jack"];
+        allPersonNames.push("Ken")
+
         const formRef = ref(null);
         const model = reactive({
             title: null,
@@ -201,7 +217,7 @@ export default defineComponent({
             type: null,
             chair_id: null,
             minute_taker_id: null,
-            attendee_association: [],
+            attendees: [],
             announcements: [{ content: '' }],
             extempores: [{ content: '' }],
             motions: [{
@@ -218,10 +234,10 @@ export default defineComponent({
             label: v,
             value: v
         }));
-        const personOptions = ["路婉婷", "潘家偉", "郁美玲"].map((v, i) => ({
-            label: v,
-            value: i
-        }));
+        // const personOptions = ["alice"].map((v, i) => ({
+        //     label: v,
+        //     value: i+1
+        // }));
         const statusOptions = ["討論中", "執行中", "結案"].map((v) => ({
             label: v,
             value: v
@@ -261,7 +277,7 @@ export default defineComponent({
                 trigger: ["blur", "change"],
                 message: "必須要有紀錄"
             },
-            attendee_association: {
+            attendees: {
                 type: "array",
                 required: true,
                 trigger: ["blur", "change"],
@@ -364,7 +380,6 @@ export default defineComponent({
             size: ref("medium"),
             model,
             meetingTypeOptions,
-            personOptions,
             statusOptions,
             rules,
             removeAnnouncement,
@@ -382,9 +397,9 @@ export default defineComponent({
             const url = 'http://127.0.0.1:8000/meeting/'
             if (info) {
                 const token = JSON.parse(info).token
-                this.model.attendee_association = [
+                this.model.attendees = [
                     {
-                        "person_id": 0,
+                        "person_id": 6,
                         "is_present": true,
                         "is_confirmed": false,
                         "is_member": true,
@@ -416,19 +431,34 @@ export default defineComponent({
                 })
             }
         },
-        changeAttendeeAssociation(value){
-            value = 2
-            this.model.attendee_association = [
-                {
-                    "person_id": 0,
-                    "is_present": true,
-                    "is_confirmed": false,
-                    "is_member": true,
-                }
-            ]
-            console.log('showwwwww', this.model)
-            return value
+        getAllPerson(){
+            return ["Alice", "Ben"]
         }
+        // async getAllPerson(){
+        //     // 獲取Cookies當中的login資訊並取得token
+        //     const info = Cookies.get('login')
+        //     let allPersonName = []
+        //     if (info){
+        //         const token = JSON.parse(info).token
+        //         await axios({
+        //             method: 'get',
+        //             url: 'http://127.0.0.1:8000/person/',
+        //             headers: {
+        //             accept: 'application/json',
+        //             'Content-Type': 'multipart/form-data',
+        //             'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+        //             }, 
+        //         })
+        //         .then((response)=>{
+        //             console.log('success', response)
+        //             this.attendees = response.data
+        //             for (var i = 0; i < response.data.length; i++) {
+        //                 allPersonName.push(response.data[i].name);
+        //             }
+        //             console.log('allPersonName:', allPersonName)
+        //         })
+        //     }
+        // }
     },
 });
 </script>
