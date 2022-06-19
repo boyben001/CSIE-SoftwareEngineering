@@ -6,21 +6,21 @@ const mainRoutes = [
         meta: { requireAuth: true }
     },
     {
-        path: '/newConf',
-        name: 'newConf',
-        component: () => import('../views/NewConfView.vue'),
+        path: '/new-meeting',
+        name: 'newMeeting',
+        component: () => import('../views/NewMeetingView.vue'),
         meta: { requireAuth: true }
     },
     {
-        path: '/listConf',
-        name: 'listConf',
-        component: () => import('../views/ListConfView.vue'),
+        path: '/meeting',
+        name: 'listMeeting',
+        component: () => import('../views/ListMeetingView.vue'),
         meta: { requireAuth: true }
     },
     {
-        path: '/decisionTrack',
-        name: 'decisionTrack',
-        component: () => import('../views/DecisionTrackView.vue'),
+        path: '/motion',
+        name: 'listMotion',
+        component: () => import('../views/ListMotionView.vue'),
         meta: { requireAuth: true }
     },
     {
@@ -31,16 +31,16 @@ const mainRoutes = [
     },
     // get id of conference
     {
-        path: '/listConf/:confId',
-        name: 'meetingDetail',
-        component: () => import('../views/ListConfView.vue'),
+        path: '/meeting/:meetingId',
+        name: 'meetingContent',
+        component: () => import('../views/ListMeetingView.vue'),
         meta: { requireAuth: true }
     },
     // get id of decision
     {
-        path: '/decisionTrack/:deciId',
-        name: 'decisionDetail',
-        component: () => import('../views/DecisionTrackView.vue'),
+        path: '/motion/:deciId',
+        name: 'motionContent',
+        component: () => import('../views/ListMotionView.vue'),
         meta: { requireAuth: true }
     },
     // get id of member

@@ -13,7 +13,7 @@ import { NIcon } from "naive-ui";
 import {
   AddCircle as AddMeeting,
   ListCircleSharp as MeetingList,
-  BarChartSharp as DiscussionList,
+  BarChartSharp as MotionList,
   Person as PersonList
 } from "@vicons/ionicons5";
 
@@ -28,7 +28,7 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            name: 'newConf',
+            name: 'newMeeting',
           }
         },
         { default: () => '新增會議' }
@@ -42,7 +42,7 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            name: 'listConf',
+            name: 'listMeeting',
           }
         },
         { default: () => '會議列表' }
@@ -56,13 +56,13 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            name: 'decisionTrack',
+            name: 'listMotion',
           }
         },
         { default: () => '決策追蹤' }
       ),
-    key: "discussionList",
-    icon: renderIcon(DiscussionList),
+    key: "motionList",
+    icon: renderIcon(MotionList),
   },
   {
     label: () =>

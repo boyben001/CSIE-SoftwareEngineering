@@ -11,7 +11,7 @@ import { defineComponent } from "vue";
 import AddMeeting from '@/components/AddMeetingForm.vue'
 
 export default defineComponent({
-  name: 'newConf',
+  name: 'newMeeting',
   components: {
     AddMeeting
   }

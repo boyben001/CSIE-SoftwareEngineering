@@ -1,6 +1,6 @@
 <template>
   <n-space justify="space-between" class="navbar">
-    <router-link to="./home" style="text-decoration:none;">
+    <router-link to="/home" style="text-decoration:none;">
       <div class="navbar_title">
         <img class="navbar_icon" src="../assets/icon/csie-logo.png" alt="">
         會議管理系統
