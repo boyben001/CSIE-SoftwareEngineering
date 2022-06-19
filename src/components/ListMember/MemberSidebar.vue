@@ -1,15 +1,16 @@
 <template>
     <n-space vertical style="padding-right:0.5vw">
-        <n-card v-for="(meet, index) in meets" :key=index hoverable size="small">
-            <router-link :to="`/meeting/${meet.id}`" style="text-decoration:none;">
-            <n-h4 style="font-weight: bold; color:rgb(220, 161, 52)">{{ meet.title }}</n-h4>
-            <n-tag type="success">
-                {{ meet.type }}
-            </n-tag>
-            <n-text italic>
-                <br>
-                {{ meet.time }}
-            </n-text>
+        <n-card v-for="(person, index) in people" :key=index hoverable size="small">
+            <router-link :to="`/member/${person.id}`" style="text-decoration:none;">
+                <n-space justify="space-between">
+                    <n-h4 style="font-weight: bold; color:rgb(52, 203, 220)">{{ person.name }}</n-h4>
+                    <n-tag type="success" round>
+                        {{ person.type }}
+                    </n-tag>
+                </n-space>
+                <n-text italic>
+                    {{ person.email }}
+                </n-text>
             </router-link>
         </n-card>
     </n-space>
@@ -20,21 +21,20 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 export default {
-    name: "MeetingSidebar",
+    name: "MemberSidebar",
     data() {
         return {
-            meets: [{}]
+            people: [{}]
         };
     },
     methods: {
         async getCurrentMeeting() {
-            // 獲取Cookies當中的login資訊並取得token
             const info = Cookies.get('login')
             if (info) {
                 const token = JSON.parse(info).token
                 await axios({
                     method: 'get',
-                    url: 'http://127.0.0.1:8000/meeting/',
+                    url: 'http://127.0.0.1:8000/person/',
                     headers: {
                         accept: 'application/json',
                         'Content-Type': 'multipart/form-data',
@@ -42,7 +42,7 @@ export default {
                     },
                 })
                     .then((response) => {
-                        this.meets = response.data;
+                        this.people = response.data;
                     })
             }
         }
