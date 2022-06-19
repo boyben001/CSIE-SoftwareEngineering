@@ -14,7 +14,8 @@ import {
   AddCircle as AddMeeting,
   ListCircleSharp as MeetingList,
   BarChartSharp as MotionList,
-  Person as PersonList
+  Person as PersonList,
+  PersonAdd as AddPerson
 } from "@vicons/ionicons5";
 
 function renderIcon(icon) {
@@ -35,6 +36,20 @@ const menuOptions = [
       ),
     key: "addMeeting",
     icon: renderIcon(AddMeeting),
+  },
+   {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'newPerson',
+          }
+        },
+        { default: () => '新增人員' }
+      ),
+    key: "addPerson",
+    icon: renderIcon(AddPerson),
   },
   {
     label: () =>

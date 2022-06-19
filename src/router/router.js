@@ -12,6 +12,12 @@ const mainRoutes = [
         meta: { requireAuth: true }
     },
     {
+        path: '/new-person',
+        name: 'newPerson',
+        component: () => import('../views/NewPersonView.vue'),
+        meta: { requireAuth: true }
+    },
+    {
         path: '/meeting',
         name: 'listMeeting',
         component: () => import('../views/ListMeetingView.vue'),
