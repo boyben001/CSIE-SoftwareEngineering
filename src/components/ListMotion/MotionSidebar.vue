@@ -1,9 +1,12 @@
 <template>
     <n-space vertical style="padding-right:0.5vw">
     <!-- TODO: Step1 : for motion in motions  -->
-        <n-card v-for="(meet, index) in meets" :key=index hoverable size="small">
+        <n-card v-for="(motion, index) in motions" :key=index hoverable size="small">
             <!-- TODO: Step 2 : motion JSON -->
-            <pre></pre>
+            <router-link :to="`/motion/${index+1}`" style="text-decoration:none;">
+            <n-h4 style="font-weight: bold; color:rgb(220, 161, 52)">{{ motion.description }}</n-h4>
+            <pre>{{ motion }}</pre>
+            </router-link>
             <!-- <router-link :to="`/meeting/${meet.id}`" style="text-decoration:none;">
             <n-h4 style="font-weight: bold; color:rgb(220, 161, 52)">{{ meet.id }}{{ meet.title }}</n-h4>
             <n-tag type="success">
@@ -27,17 +30,17 @@ export default {
     data() {
         // TODO: motions
         return {
-            meets: [{}]
+            motions: [{}]
         };
     },
     methods: {
-        async getCurrentMeeting() {
+        async getCurrentMotion() {
             const info = Cookies.get('login')
             if (info) {
                 const token = JSON.parse(info).token
                 await axios({
                     method: 'get',
-                    url: 'http://127.0.0.1:8000/meeting/',
+                    url: 'http://127.0.0.1:8000/motion/',
                     headers: {
                         accept: 'application/json',
                         'Content-Type': 'multipart/form-data',
@@ -46,13 +49,14 @@ export default {
                 })
                     // TODO: this.motions = response.data
                     .then((response) => {
-                        this.meets = response.data;
+                        this.motions = response.data;
+                        return response.data
                     })
             }
         }
     },
     async mounted() {
-        await this.getCurrentMeeting();
+        await this.getCurrentMotion();
     }
 };
 </script>

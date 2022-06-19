@@ -1,6 +1,6 @@
 <template>
-    {{ this.$route.params.meetingId }}
-    <pre>{{ meeting }}</pre>
+    {{ this.$route.params.motionId }}
+    <pre>{{ motion }}</pre>
     <!-- <div v-for="{ conference, index } in conferences" :key="index">
         <div v-if="chartIsShow && index == meetingId" class="vertical-align p-5 w-100">
             <h1 style="text-align: center; margin-bottom: 30px">{{ conference.title }}</h1>
@@ -65,24 +65,24 @@ export default {
     },
     data() {
         return {
-            meeting: {}
+            motion: {},
         };
     },
     computed: {
-        meetingId() {
-            return this.$route.params.meetingId;
+        motionId() {
+            return this.$route.params.motionId;
         },
     },
     watch: {
-        meetingId: async function (val) {
-            this.meeting = await this.getMeet(val);
+        motionId: async function () {
+            this.getMotion(this.$route.params.motionId-1)
         }
     },
     methods: {
-        async getMeet(id) {
+        async getMotion(index) {
             // 獲取Cookies當中的login資訊並取得token
             const info = Cookies.get('login')
-            const url = 'http://127.0.0.1:8000/meeting/' + id
+            const url = 'http://127.0.0.1:8000/motion/'
             if (info) {
                 const token = JSON.parse(info).token
                 return await axios({
@@ -94,11 +94,12 @@ export default {
                         'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
                     },
                 })
-                    .then((response) => {
-                        return response.data
-                    })
+                .then((response) => {
+                    this.motion = response.data[index]
+                    return response.data
+                })
             }
         }
-    }
+    },
 }
 </script>
