@@ -34,8 +34,8 @@
         <n-form-item label="紀錄" path="minute_taker_id">
             <n-select v-model:value="model.minute_taker_id" placeholder="選擇一項" :options="personOptions" />
         </n-form-item>
-        <n-form-item label="與會人員" path="attendee_association">
-            <n-select v-model:value="model.attendee_association" placeholder="選擇多項" :options="personOptions" multiple />
+        <n-form-item label="與會人員" path="attendees">
+            <n-select v-model:value="model.attendees" placeholder="選擇多項" :options="personOptions" multiple />
         </n-form-item>
 
         <n-divider />
@@ -178,162 +178,26 @@
         </n-button>
     </n-form>
 
-    <pre>{{ JSON.stringify(model, null, 2) }}
-</pre>
+    <pre>{{ JSON.stringify(model, null, 2) }}</pre>
 </template>
 
 <script>
 import { defineComponent, ref, reactive } from "vue";
 import { ArchiveOutline as ArchiveIcon } from "@vicons/ionicons5";
+import modelForm from './model.js'
+import rules from './rules.js'
+
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
+import {meetingTypeOptions, personOptions, statusOptions} from './options.js'
 export default defineComponent({
     components: {
         ArchiveIcon
     },
     setup() {
         const formRef = ref(null);
-        const model = reactive({
-            title: null,
-            time: null,
-            location: null,
-            type: null,
-            chair_id: null,
-            minute_taker_id: null,
-            attendee_association: [],
-            announcements: [{ content: '' }],
-            extempores: [{ content: '' }],
-            motions: [{
-                description: '',
-                content: '',
-                status: '',
-                resolution: '',
-                execution: ''
-            }]
-        });
-
-
-        const meetingTypeOptions = ["系務會議", "系教評會", "系課程委員會", "招生暨學生事務委員會", "系發展協會"].map((v) => ({
-            label: v,
-            value: v
-        }));
-        const personOptions = ["路婉婷", "潘家偉", "郁美玲"].map((v, i) => ({
-            label: v,
-            value: i
-        }));
-        const statusOptions = ["討論中", "執行中", "結案"].map((v) => ({
-            label: v,
-            value: v
-        }));
-
-        const rules = {
-            title: {
-                required: true,
-                trigger: ["blur", "input"],
-                message: "標題不得為空"
-            },
-            time: {
-                type: 'number',
-                required: true,
-                trigger: ["blur", "input"],
-                message: "時間不得為空"
-            },
-            location: {
-                required: true,
-                trigger: ["blur", "input"],
-                message: "地點不得為空"
-            },
-            type: {
-                required: true,
-                trigger: ["blur", "input"],
-                message: "類型不得為空"
-            },
-            chair_id: {
-                type: 'number',
-                required: true,
-                trigger: ["blur", "change"],
-                message: "必須要有主席"
-            },
-            minute_taker_id: {
-                type: 'number',
-                required: true,
-                trigger: ["blur", "change"],
-                message: "必須要有紀錄"
-            },
-            attendee_association: {
-                type: "array",
-                required: true,
-                trigger: ["blur", "change"],
-                message: "必須要有與會人員"
-            },
-            datetimeValue: {
-                type: "number",
-                required: true,
-                trigger: ["blur", "change"],
-                message: "Please input datetimeValue"
-            },
-            announcements: {
-                content: {
-                    required: true,
-                    trigger: ["blur", "input"],
-                    message: "Please input nestedValue.path1"
-                },
-            },
-            nestedValue: {
-                path1: {
-                    required: true,
-                    trigger: ["blur", "input"],
-                    message: "Please input nestedValue.path1"
-                },
-                path2: {
-                    required: true,
-                    trigger: ["blur", "change"],
-                    message: "Please input nestedValue.path2"
-                }
-            },
-            checkboxGroupValue: {
-                type: "array",
-                required: true,
-                trigger: "change",
-                message: "Please select checkboxGroupValue"
-            },
-            radioGroupValue: {
-                required: true,
-                trigger: "change",
-                message: "Please select radioGroupValue"
-            },
-            radioButtonGroupValue: {
-                required: true,
-                trigger: "change",
-                message: "Please select radioButtonGroupValue"
-            },
-            inputNumberValue: {
-                type: "number",
-                required: true,
-                trigger: ["blur", "change"],
-                message: "Please input inputNumberValue"
-            },
-            timePickerValue: {
-                type: "number",
-                required: true,
-                trigger: ["blur", "change"],
-                message: "Please input timePickerValue"
-            },
-            sliderValue: {
-                validator(rule, value) {
-                    return value > 50;
-                },
-                trigger: ["blur", "change"],
-                message: "sliderValue should be larger tha 50"
-            },
-            transferValue: {
-                type: "array",
-                required: true,
-                trigger: "change",
-                message: "Please input transferValue"
-            }
-        }
+        const model = reactive(modelForm);
 
         const removeAnnouncement = (index) => {
             model.announcements.splice(index, 1)
@@ -382,7 +246,7 @@ export default defineComponent({
             const url = 'http://127.0.0.1:8000/meeting/'
             if (info) {
                 const token = JSON.parse(info).token
-                this.model.attendee_association = [
+                this.model.attendees = [
                     {
                         "person_id": 0,
                         "is_present": true,
@@ -406,19 +270,19 @@ export default defineComponent({
                         'files': []
                     }
                 })
-                .then((response) => {
-                    console.log('success', response)
-                    //this.member = response.data
-                    //console.log('members:', this.members)
-                })
-                .catch((error) => {
-                    console.log('errorrr', error.response.data)
-                })
+                    .then((response) => {
+                        console.log('success', response)
+                        //this.member = response.data
+                        //console.log('members:', this.members)
+                    })
+                    .catch((error) => {
+                        console.log('errorrr', error.response.data)
+                    })
             }
         },
-        changeAttendeeAssociation(value){
+        changeAttendeeAssociation(value) {
             value = 2
-            this.model.attendee_association = [
+            this.model.attendees = [
                 {
                     "person_id": 0,
                     "is_present": true,
