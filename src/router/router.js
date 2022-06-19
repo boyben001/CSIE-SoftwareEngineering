@@ -38,7 +38,7 @@ const mainRoutes = [
     },
     // get id of decision
     {
-        path: '/motion/:deciId',
+        path: '/motion/:motionId',
         name: 'motionContent',
         component: () => import('../views/ListMotionView.vue'),
         meta: { requireAuth: true }
