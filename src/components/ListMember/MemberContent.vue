@@ -1,56 +1,68 @@
 <template>
-    <pre>{{ person }}</pre>
-    <!-- <div v-for="{ conference, index } in conferences" :key="index">
-        <div v-if="chartIsShow && index == personId" class="vertical-align p-5 w-100">
-            <h1 style="text-align: center; margin-bottom: 30px">{{ conference.title }}</h1>
-            <div class="my-2">時間: {{ conference.time }}</div>
-            <div class="my-2">地點: {{ conference.location }}</div>
-            <div class="my-2">類型: {{ conference.type }}</div>
-            <div class="my-2">主席: {{ conference.chair_id }}</div>
-            <div class="my-2">紀錄: {{ conference.minute_taker_id }}</div>
-            <div class="d-flex my-2">
-                <div>與會人員:</div>
-                <div v-for="(item, index) in conference.attendee_association" :key=index>
-                    <div v-if="item.is_present">
-                        {{ item.person_id }}
-                    </div>
-                </div>
-            </div>
-            <div class="my-2">列席人員: 暫時空著</div>
-            <div class="my-4">
-                <h3 style="border-bottom: 5px solid #dee2e6 ">主席致詞:</h3>
-                {{ conference.chair_speech }}
-            </div>
-            <div class="my-4">
-                <h3 style="border-bottom: 5px solid #dee2e6 ">報告事項:</h3>
-                <div v-for="(item, index) in conference.announcenents" :key=index>
-                    <br>
-                    {{ index }}. {{ item.content }}
-                </div>
-            </div>
-            <div>
-                <h3 style="border-bottom: 5px solid #dee2e6 ">討論事項:</h3>
-                <div v-for="(item, index) in conference.motions" :key=index>
-                    <div>提案 {{ index }} .</div>
-                    <blockquote>
-                        <div class="median-word"> 案由: {{ item.descripton }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 狀態: {{ item.status }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 內容: {{ item.content }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 決策: {{ item.resolution }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 執行: {{ item.execution }} </div>
-                    </blockquote>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    <n-grid :cols="12">
+        <n-gi offset="1" span="10">
+            <n-card v-if="person.name != null" size="huge" style="margin-top: 10vh">
+                <n-grid :x-gap="12" :cols="2" item-responsive>
+                    <n-grid-item style="font-weight: bold; text-align:center;">
+                        <img v-if="person.gender == '男'"
+                            src="https://img.icons8.com/bubbles/500/undefined/user-male.png" style="width: 80%" />
+
+                        <img v-if="person.gender == '女'"
+                            src="https://img.icons8.com/bubbles/500/undefined/amy-winehouse.png" style="width: 80%" />
+
+                        <n-h1>{{ person.name }}</n-h1>
+                        <n-tag type="info" round>{{ person.type }}</n-tag>
+                    </n-grid-item>
+                    <n-grid-item>
+                        <n-space vertical>
+                            <n-h2>基本資料</n-h2>
+                            <n-ul>
+                                <n-li>性別: {{ person.gender }}</n-li>
+                                <n-li>手機: {{ person.phone }}</n-li>
+                                <n-li>電子郵件: {{ person.email }}</n-li>
+                            </n-ul>
+
+                            <n-divider></n-divider>
+
+                            <n-h2>詳細資料</n-h2>
+                            <n-ul v-if="person.type == '系上教師'">
+                                <n-li>職稱: {{ person.dept_prof_info.job_title }}</n-li>
+                                <n-li>辦公室電話: {{ person.dept_prof_info.office_tel }}</n-li>
+                            </n-ul>
+
+                            <n-ul v-if="person.type == '系助理'">
+                                <n-li v-if="person.assistant_info != null">辦公室電話: {{ person.assistant_info.office_tel }}</n-li>
+                            </n-ul>
+
+                            <n-ul v-if="person.type == '校外教師'">
+                                <n-li>學校名稱: {{ person.other_prof_info.univ_name }}</n-li>
+                                <n-li>系所名稱: {{ person.other_prof_info.dept_name }}</n-li>
+                                <n-li>職稱: {{ person.other_prof_info.job_title }}</n-li>
+                                <n-li>辦公室電話: {{ person.other_prof_info.office_tel }}</n-li>
+                                <n-li>地址: {{ person.other_prof_info.address }}</n-li>
+                                <n-li>銀行帳戶: {{ person.other_prof_info.bank_account }}</n-li>
+                            </n-ul>
+
+                            <n-ul v-if="person.type == '業界專家'">
+                                <n-li>公司名稱: {{ person.expert_info.company_name }}</n-li>
+                                <n-li>職稱: {{ person.expert_info.job_title }}</n-li>
+                                <n-li>辦公室電話: {{ person.expert_info.office_tel }}</n-li>
+                                <n-li>地址: {{ person.expert_info.address }}</n-li>
+                                <n-li>銀行帳戶: {{ person.expert_info.bank_account }}</n-li>
+                            </n-ul>
+
+                            <n-ul v-if="person.type == '學生'">
+                                <n-li>學號: {{ person.student_info.student_id }}</n-li>
+                                <n-li>學制: {{ person.student_info.program }}</n-li>
+                                <n-li>年級: {{ person.student_info.study_year }}</n-li>
+                            </n-ul>
+                        </n-space>
+                    </n-grid-item>
+                </n-grid>
+            </n-card>
+        </n-gi>
+    </n-grid>
+
 </template>
 
 <script>
@@ -58,7 +70,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 export default {
-    name: "MemberContent",
+    name: "personContent",
     components: {
     },
     data() {
@@ -101,3 +113,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.n-ul {
+    list-style-type: none;
+}
+</style>

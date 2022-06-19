@@ -1,22 +1,26 @@
 <template>
     <n-space vertical style="padding-right:0.5vw">
-    <!-- TODO: Step1 : for motion in motions  -->
         <n-card v-for="(motion, index) in motions" :key=index hoverable size="small">
-            <!-- TODO: Step 2 : motion JSON -->
-            <router-link :to="`/motion/${index+1}`" style="text-decoration:none;">
-            <n-h4 style="font-weight: bold; color:rgb(220, 161, 52)">{{ motion.description }}</n-h4>
-            <pre>{{ motion }}</pre>
+            <router-link :to="`/motion/${index + 1}`" style="text-decoration:none;">
+                <n-h4 style="font-weight: bold">{{ motion.description }}</n-h4>
+                <n-space vertical align="left">
+                    <n-tag v-if="motion.status == '討論中'" type="error">
+                        {{ motion.status }}
+                    </n-tag>
+                    <n-tag v-else-if="motion.status == '執行中'" type="warning">
+                        {{ motion.status }}
+                    </n-tag>
+                    <n-tag v-if="motion.status == '結案'" type="success">
+                        {{ motion.status }}
+                    </n-tag>
+                    <n-ellipsis line-clamp="2" :tooltip="false" style="text-decoration:none;">
+                        <n-text>
+                            {{ motion.content }}
+                        </n-text>
+                    </n-ellipsis>
+                </n-space>
+
             </router-link>
-            <!-- <router-link :to="`/meeting/${meet.id}`" style="text-decoration:none;">
-            <n-h4 style="font-weight: bold; color:rgb(220, 161, 52)">{{ meet.id }}{{ meet.title }}</n-h4>
-            <n-tag type="success">
-                {{ meet.type }}
-            </n-tag>
-            <n-text italic>
-                <br>
-                {{ meet.time }}
-            </n-text>
-            </router-link> -->
         </n-card>
     </n-space>
 </template>
@@ -28,7 +32,6 @@ import Cookies from 'js-cookie';
 export default {
     name: "MotionSidebar",
     data() {
-        // TODO: motions
         return {
             motions: [{}]
         };
@@ -47,7 +50,6 @@ export default {
                         'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
                     },
                 })
-                    // TODO: this.motions = response.data
                     .then((response) => {
                         this.motions = response.data;
                         return response.data
