@@ -24,7 +24,7 @@ const mainRoutes = [
         meta: { requireAuth: true }
     },
     {
-        path: '/listMember',
+        path: '/member',
         name: 'listMember',
         component: () => import('../views/ListMemberView.vue'),
         meta: { requireAuth: true }
@@ -45,7 +45,7 @@ const mainRoutes = [
     },
     // get id of member
     {
-        path: '/listMember/:membId',
+        path: '/member/:personId',
         name: 'personDetail',
         component: () => import('../views/ListMemberView.vue'),
         meta: { requireAuth: true }
