@@ -40,7 +40,7 @@ export default defineComponent({
     return {
       value: valueRef,
       options: computed(() => {
-        return ["@gmail.com", "@yahooo.com.tw", "@mail.nuk.edu.tw", "@example.com"].map((suffix) => {
+        return ["@admin", "@gmail.com", "@yahooo.com.tw", "@mail.nuk.edu.tw"].map((suffix) => {
           const prefix = valueRef.value.split("@")[0];
           return {
             label: prefix + suffix,

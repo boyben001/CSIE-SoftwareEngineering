@@ -1,5 +1,11 @@
 const mainRoutes = [
     {
+        path: '/',
+        name: 'redirect',
+        redirect: '/home',
+        meta: { requireAuth: true }
+    },
+    {
         path: '/home',
         name: 'home',
         component: () => import('../views/HomeView.vue'),
@@ -35,26 +41,41 @@ const mainRoutes = [
         component: () => import('../views/ListMemberView.vue'),
         meta: { requireAuth: true }
     },
-    // get id of conference
     {
         path: '/meeting/:meetingId',
         name: 'meetingContent',
         component: () => import('../views/ListMeetingView.vue'),
         meta: { requireAuth: true }
     },
-    // get id of decision
     {
         path: '/motion/:motionId',
         name: 'motionContent',
         component: () => import('../views/ListMotionView.vue'),
         meta: { requireAuth: true }
     },
-    // get id of member
     {
         path: '/member/:personId',
         name: 'personDetail',
         component: () => import('../views/ListMemberView.vue'),
         meta: { requireAuth: true }
+    },
+    {
+        path: '/edit-person/:personId',
+        name: 'editPerson',
+        component: () => import('../views/EditPersonView.vue'),
+        meta: { requireAuth: true }
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: () => import('../views/PageNotFound404.vue'),
+        hidden: true,
+        meta: { requireAuth: true }
+    },
+    {
+        path: '/:pathMatch(.*)',
+        redirect: '/404',
+        hidden: true
     }
 ]
 

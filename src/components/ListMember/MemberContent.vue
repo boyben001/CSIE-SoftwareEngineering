@@ -2,6 +2,15 @@
     <n-grid :cols="12">
         <n-gi offset="1" span="10">
             <n-card v-if="person.name != null" size="huge" style="margin-top: 10vh">
+                <n-space justify="end">
+                    <n-button type="info">
+                        編輯
+                    </n-button>
+                    <n-button type="error">
+                        刪除
+                    </n-button>
+                </n-space>
+
                 <n-grid :x-gap="12" :cols="2" item-responsive>
                     <n-grid-item style="font-weight: bold; text-align:center;">
                         <img v-if="person.gender == '男'"
@@ -31,7 +40,8 @@
                             </n-ul>
 
                             <n-ul v-if="person.type == '系助理'">
-                                <n-li v-if="person.assistant_info != null">辦公室電話: {{ person.assistant_info.office_tel }}</n-li>
+                                <n-li v-if="person.assistant_info != null">辦公室電話: {{ person.assistant_info.office_tel }}
+                                </n-li>
                             </n-ul>
 
                             <n-ul v-if="person.type == '校外教師'">
