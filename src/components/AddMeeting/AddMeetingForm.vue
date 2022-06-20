@@ -195,10 +195,9 @@ export default defineComponent({
     components: {
         ArchiveIcon
     },
-    mounted(){
-        const allPersonNames = ["Alice", "Ben", "Jack"];
-        allPersonNames.push("Ken")
-        this.personOptions = allPersonNames.map((v, i) => ({
+    async mounted(){
+        await this.getAllPerson()
+        this.personOptions = this.personOptions.map((v, i) => ({
             label: v,
             value: i+1
         }));
@@ -209,9 +208,6 @@ export default defineComponent({
         }
     },
     setup() {
-        const allPersonNames = ["Alice", "Ben", "Jack"];
-        allPersonNames.push("Ken")
-
         const formRef = ref(null);
         const model = reactive(modelForm);
 
@@ -295,34 +291,32 @@ export default defineComponent({
                     })
             }
         },
-        getAllPerson(){
-            return ["Alice", "Ben"]
+        async getAllPerson(){
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            let allPersonName = []
+            if (info){
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'get',
+                    url: 'http://127.0.0.1:8000/person/',
+                    headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    }, 
+                })
+                .then((response)=>{
+                    console.log('success', response)
+                    this.attendees = response.data
+                    for (var i = 0; i < response.data.length; i++) {
+                        allPersonName.push(response.data[i].name);
+                    }
+                    this.personOptions = allPersonName
+                    console.log('allPersonName:', this.personOptions)
+                })
+            }
         }
-        // async getAllPerson(){
-        //     // 獲取Cookies當中的login資訊並取得token
-        //     const info = Cookies.get('login')
-        //     let allPersonName = []
-        //     if (info){
-        //         const token = JSON.parse(info).token
-        //         await axios({
-        //             method: 'get',
-        //             url: 'http://127.0.0.1:8000/person/',
-        //             headers: {
-        //             accept: 'application/json',
-        //             'Content-Type': 'multipart/form-data',
-        //             'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-        //             }, 
-        //         })
-        //         .then((response)=>{
-        //             console.log('success', response)
-        //             this.attendees = response.data
-        //             for (var i = 0; i < response.data.length; i++) {
-        //                 allPersonName.push(response.data[i].name);
-        //             }
-        //             console.log('allPersonName:', allPersonName)
-        //         })
-        //     }
-        // }
     },
 });
 </script>
