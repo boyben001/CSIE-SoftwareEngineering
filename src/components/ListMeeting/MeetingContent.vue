@@ -1,57 +1,91 @@
 <template>
-    {{ this.$route.params.meetingId }}
-    <pre>{{ meeting }}</pre>
-    <!-- <div v-for="{ conference, index } in conferences" :key="index">
-        <div v-if="chartIsShow && index == meetingId" class="vertical-align p-5 w-100">
-            <h1 style="text-align: center; margin-bottom: 30px">{{ conference.title }}</h1>
-            <div class="my-2">時間: {{ conference.time }}</div>
-            <div class="my-2">地點: {{ conference.location }}</div>
-            <div class="my-2">類型: {{ conference.type }}</div>
-            <div class="my-2">主席: {{ conference.chair_id }}</div>
-            <div class="my-2">紀錄: {{ conference.minute_taker_id }}</div>
-            <div class="d-flex my-2">
-                <div>與會人員:</div>
-                <div v-for="(item, index) in conference.attendee_association" :key=index>
-                    <div v-if="item.is_present">
+    <n-card style="padding: 2rem;">
+        <n-h1>{{ meeting.title }}</n-h1>
+        <n-space vertical>
+            <n-tag type="info" round>時間：{{ meeting.time }}</n-tag>
+            <n-tag type="info" round>地點：{{ meeting.location }}</n-tag>
+            <n-tag type="info" round>類型：{{ meeting.type }}</n-tag>
+            <n-tag type="info" round>主席：{{ meeting.chair_id }}</n-tag>
+            <n-tag type="info" round>紀錄：{{ meeting.minute_taker_id }}</n-tag>
+        </n-space>
+        <n-space vertical>
+            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">與會人員</n-h2>
+            <n-space>
+                <n-space v-for="(item, index) in meeting.attendee_association" :key="index"
+                    style="margin: 0px !important">
+                    <n-tag type="info" v-if="item.is_present">
                         {{ item.person_id }}
-                    </div>
-                </div>
-            </div>
-            <div class="my-2">列席人員: 暫時空著</div>
-            <div class="my-4">
-                <h3 style="border-bottom: 5px solid #dee2e6 ">主席致詞:</h3>
-                {{ conference.chair_speech }}
-            </div>
-            <div class="my-4">
-                <h3 style="border-bottom: 5px solid #dee2e6 ">報告事項:</h3>
-                <div v-for="(item, index) in conference.announcenents" :key=index>
-                    <br>
-                    {{ index }}. {{ item.content }}
-                </div>
-            </div>
-            <div>
-                <h3 style="border-bottom: 5px solid #dee2e6 ">討論事項:</h3>
-                <div v-for="(item, index) in conference.motions" :key=index>
-                    <div>提案 {{ index }} .</div>
-                    <blockquote>
-                        <div class="median-word"> 案由: {{ item.descripton }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 狀態: {{ item.status }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 內容: {{ item.content }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 決策: {{ item.resolution }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 執行: {{ item.execution }} </div>
-                    </blockquote>
-                </div>
-            </div>
-        </div>
-    </div> -->
+                    </n-tag>
+                </n-space>
+            </n-space>
+        </n-space>
+        <n-space vertical>
+            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">主席致詞</n-h2>
+            <n-card>
+                <template #action>
+                    {{ meeting.chair_speech }}
+                </template>
+            </n-card>
+        </n-space>
+        <n-space vertical>
+            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">報告事項</n-h2>
+            <n-space v-for="(item, index) in meeting.announcements" :key="index">
+                <br>
+                {{ index + 1 }}. {{ item.content }}
+            </n-space>
+        </n-space>
+        <n-space vertical>
+            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">討論事項</n-h2>
+            <n-space vertical v-for="(item, index) in meeting.motions" :key="index"
+                style="padding: 0.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">
+                <n-space>
+                    <n-tag type="info" round>提案</n-tag>{{ index + 1 }}
+                </n-space>
+                <n-space>
+                    <n-tag type="info" round>案由</n-tag>{{ item.description }}
+                </n-space>
+                <n-space>
+                    <n-tag type="info" round>狀態</n-tag>
+                    <n-tag v-if="item.status === '結案'" type="primary" round> {{ item.status }}</n-tag>
+                    <n-tag v-else-if="item.status === '執行中'" type="warning" round> {{ item.status }}</n-tag>
+                    <n-tag v-else-if="item.status === '討論中'" type="error" round> {{ item.status }}</n-tag>
+                </n-space>
+                <n-space v-if="item.content != ''" style="align-items: center">
+                    <n-tag type="info" round>內容</n-tag>
+                    <n-card>
+                        <template #action>
+                            {{ item.content }}
+                        </template>
+                    </n-card>
+                </n-space>
+                <n-space v-if="item.resolution != ''" style="align-items: center">
+                    <n-tag type="info" round>決策</n-tag>
+                    <n-card>
+                        <template #action>
+                            {{ item.resolution }}
+                        </template>
+                    </n-card>
+                </n-space>
+                <n-space v-if="item.execution != ''" style="align-items: center">
+                    <n-tag type="info" round>執行</n-tag>
+                    <n-card>
+                        <template #action>
+                            {{ item.execution }}
+                        </template>
+                    </n-card>
+                </n-space>
+            </n-space>
+        </n-space>
+        <n-space vertical>
+            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">臨時動議</n-h2>
+            <n-space v-for="(item, index) in meeting.extempores" :key="index">
+                <br>
+                {{ index + 1 }}. {{ item.content }}
+            </n-space>
+        </n-space>
+    </n-card>
+    <!-- {{ this.$route.params.meetingId }} -->
+    <!-- <pre>{{ meeting }}</pre> -->
 </template>
 
 <script>

@@ -1,5 +1,6 @@
 <template>
-  <n-layout-sider bordered show-trigger="bar" collapse-mode="width" :width="180" :native-scrollbar="false">
+  <n-layout-sider bordered show-trigger="bar" collapse-mode="width" :width="180" :native-scrollbar="false"
+    style="height: 100vh; max-height: 100vh;">
 
     <n-menu :collapsed-icon-size="28" :icon-size="28" :options="menuOptions" />
 
@@ -37,7 +38,7 @@ const menuOptions = [
     key: "addMeeting",
     icon: renderIcon(AddMeeting),
   },
-   {
+  {
     label: () =>
       h(
         RouterLink,

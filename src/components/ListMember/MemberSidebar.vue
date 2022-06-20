@@ -1,5 +1,5 @@
 <template>
-    <n-space vertical style="padding-right:0.5vw">
+    <n-space vertical style="padding-right:0.5vw;  max-height: 100vh">
         <n-card v-for="(person, index) in people" :key=index hoverable size="small">
             <router-link :to="`/member/${person.id}`" style="text-decoration:none;">
                 <n-space justify="space-between">

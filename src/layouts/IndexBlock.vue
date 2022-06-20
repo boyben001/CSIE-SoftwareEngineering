@@ -5,7 +5,7 @@
         <Header />
       </n-layout-header>
       <n-layout-content>
-        <n-layout has-sider style="height: 93vh">
+        <n-layout has-sider>
           <Sidebar />
           <Content />
         </n-layout>

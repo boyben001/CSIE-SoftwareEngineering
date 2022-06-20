@@ -1,15 +1,15 @@
 <template>
-    <n-space vertical style="padding-right:0.5vw">
+    <n-space vertical style="padding-right:0.5vw; max-height: 100vh">
         <n-card v-for="(meet, index) in meets" :key=index hoverable size="small">
             <router-link :to="`/meeting/${meet.id}`" style="text-decoration:none;">
-            <n-h4 style="font-weight: bold;">{{ meet.title }}</n-h4>
-            <n-tag type="success">
-                {{ meet.type }}
-            </n-tag>
-            <n-text italic>
-                <br>
-                {{ meet.time }}
-            </n-text>
+                <n-h4 style="font-weight: bold;">{{ meet.title }}</n-h4>
+                <n-tag type="success">
+                    {{ meet.type }}
+                </n-tag>
+                <n-text italic>
+                    <br>
+                    {{ meet.time }}
+                </n-text>
             </router-link>
         </n-card>
     </n-space>

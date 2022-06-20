@@ -1,14 +1,14 @@
 <template>
-  <n-layout has-sider style="height: 100%">
+  <n-layout has-sider style="max-height: 100vh">
     <n-layout style="padding-left:1.5vw">
       <n-grid :cols="4">
         <n-gi>
-          <n-scrollbar style="max-height:93.1vh">
+          <n-scrollbar style="max-height:95vh">
             <SideBar />
           </n-scrollbar>
         </n-gi>
         <n-gi span="3">
-          <n-scrollbar style="max-height:93.1vh">
+          <n-scrollbar style="max-height:95vh">
             <Content />
           </n-scrollbar>
         </n-gi>

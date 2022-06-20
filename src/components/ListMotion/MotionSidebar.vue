@@ -1,5 +1,5 @@
 <template>
-    <n-space vertical style="padding-right:0.5vw">
+    <n-space vertical style="padding-right:0.5vw; max-height: 100vh">
         <n-card v-for="(motion, index) in motions" :key=index hoverable size="small">
             <router-link :to="`/motion/${index + 1}`" style="text-decoration:none;">
                 <n-h4 style="font-weight: bold">{{ motion.description }}</n-h4>
