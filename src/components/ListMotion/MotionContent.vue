@@ -1,57 +1,52 @@
 <template>
-    {{ this.$route.params.motionId }}
-    <pre>{{ motion }}</pre>
-    <!-- <div v-for="{ conference, index } in conferences" :key="index">
-        <div v-if="chartIsShow && index == meetingId" class="vertical-align p-5 w-100">
-            <h1 style="text-align: center; margin-bottom: 30px">{{ conference.title }}</h1>
-            <div class="my-2">時間: {{ conference.time }}</div>
-            <div class="my-2">地點: {{ conference.location }}</div>
-            <div class="my-2">類型: {{ conference.type }}</div>
-            <div class="my-2">主席: {{ conference.chair_id }}</div>
-            <div class="my-2">紀錄: {{ conference.minute_taker_id }}</div>
-            <div class="d-flex my-2">
-                <div>與會人員:</div>
-                <div v-for="(item, index) in conference.attendee_association" :key=index>
-                    <div v-if="item.is_present">
-                        {{ item.person_id }}
-                    </div>
-                </div>
-            </div>
-            <div class="my-2">列席人員: 暫時空著</div>
-            <div class="my-4">
-                <h3 style="border-bottom: 5px solid #dee2e6 ">主席致詞:</h3>
-                {{ conference.chair_speech }}
-            </div>
-            <div class="my-4">
-                <h3 style="border-bottom: 5px solid #dee2e6 ">報告事項:</h3>
-                <div v-for="(item, index) in conference.announcenents" :key=index>
-                    <br>
-                    {{ index }}. {{ item.content }}
-                </div>
-            </div>
-            <div>
-                <h3 style="border-bottom: 5px solid #dee2e6 ">討論事項:</h3>
-                <div v-for="(item, index) in conference.motions" :key=index>
-                    <div>提案 {{ index }} .</div>
-                    <blockquote>
-                        <div class="median-word"> 案由: {{ item.descripton }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 狀態: {{ item.status }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 內容: {{ item.content }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 決策: {{ item.resolution }} </div>
-                    </blockquote>
-                    <blockquote>
-                        <div class="median-word"> 執行: {{ item.execution }} </div>
-                    </blockquote>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    <n-grid :cols="12">
+        <n-gi offset="1" span="10">
+            <n-card size="huge" style="margin-top: 15vh">
+                <n-grid :x-gap="12" :cols="1" item-responsive>
+                    <n-grid-item>
+                        <n-space style="margin: 2rem 0">
+                            <n-tag type="info" round>案由</n-tag>{{ motion.description }}
+                        </n-space>
+                        <n-space style="margin: 2rem 0">
+                            <n-tag type="info" round>狀態</n-tag>
+                            <n-tag v-if="motion.status === '結案'" type="primary" round> {{ motion.status }}</n-tag>
+                            <n-tag v-else-if="motion.status === '執行中'" type="warning" round> {{ motion.status }}</n-tag>
+                            <n-tag v-else-if="motion.status === '討論中'" type="error" round> {{ motion.status }}</n-tag>
+                        </n-space>
+                        <n-space vertical v-if="motion.content != ''" style="margin: 2rem 0;align-items: flex-start;">
+                            <n-tag type="info" round>內容</n-tag>
+                            <n-card>
+                                <template #action>
+                                    {{ motion.content }}
+                                </template>
+                            </n-card>
+                        </n-space>
+                        <n-space vertical v-if="motion.resolution != ''" style="margin: 2rem 0;align-items: flex-start">
+                            <n-tag type="info" round>決策</n-tag>
+                            <n-card>
+                                <template #action>
+                                    {{ motion.resolution }}
+                                </template>
+                            </n-card>
+                        </n-space>
+                        <n-space vertical v-if="motion.execution != ''" style="margin: 2rem 0;align-items: flex-start">
+                            <n-tag type="info" round>執行</n-tag>
+                            <n-card>
+                                <template #action>
+                                    {{ motion.execution }}
+                                </template>
+                            </n-card>
+                        </n-space>
+                    </n-grid-item>
+                    <n-grid-item>
+
+                    </n-grid-item>
+                </n-grid>
+            </n-card>
+        </n-gi>
+    </n-grid>
+    <!-- {{ this.$route.params.motionId }} -->
+    <!-- <pre>{{ motion }}</pre> -->
 </template>
 
 <script>
@@ -75,7 +70,7 @@ export default {
     },
     watch: {
         motionId: async function () {
-            this.getMotion(this.$route.params.motionId-1)
+            this.getMotion(this.$route.params.motionId - 1)
         }
     },
     methods: {
@@ -94,10 +89,10 @@ export default {
                         'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
                     },
                 })
-                .then((response) => {
-                    this.motion = response.data[index]
-                    return response.data
-                })
+                    .then((response) => {
+                        this.motion = response.data[index]
+                        return response.data
+                    })
             }
         }
     },
