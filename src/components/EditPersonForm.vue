@@ -176,8 +176,8 @@ export default defineComponent({
     },
     async mounted(){
         this.model = reactive(modelForm);
-        console.log("id: ", this.$route.params.personId)
-        await this.getPerson(this.$route.params.personId)
+        console.log("id: ", this.personId)
+        await this.getPerson(this.personId)
     }
 })
 </script>

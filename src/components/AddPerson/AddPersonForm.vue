@@ -5,7 +5,7 @@
             maxWidth: '100%'
         }">
         <n-h2>基本資訊</n-h2>
-        <n-form-item label="姓名" path="title">
+        <n-form-item label="姓名" path="name">
             <n-input v-model:value="model.name" placeholder="" maxlength="20" show-count clearable />
         </n-form-item>
         <n-form-item label="性別" path="gender">
@@ -31,77 +31,77 @@
                 <n-input v-model:value="model.dept_prof_info.job_title" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="辦公室電話" path="model.dept_prof_info.office_tel">
+            <n-form-item label="辦公室電話" path="dept_prof_info.office_tel">
                 <n-input v-model:value="model.dept_prof_info.office_tel" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
         </n-space>
 
         <n-space v-if="model.type == '系助理'" vertical>
-            <n-form-item label="辦公室電話" path="model.assistant_info.office_tel">
+            <n-form-item label="辦公室電話" path="assistant_info.office_tel">
                 <n-input v-model:value="model.assistant_info.office_tel" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
         </n-space>
 
         <n-space v-if="model.type == '校外教師'" vertical>
-            <n-form-item label="學校名稱" path="dept_prof_info.job_title">
+            <n-form-item label="學校名稱" path="other_prof_info.job_title">
                 <n-input v-model:value="model.other_prof_info.univ_name" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="系所名稱" path="model.other_prof_info.dept_name">
+            <n-form-item label="系所名稱" path="other_prof_info.dept_name">
                 <n-input v-model:value="model.other_prof_info.dept_name" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="職稱" path="model.other_prof_info.job_title">
+            <n-form-item label="職稱" path="other_prof_info.job_title">
                 <n-input v-model:value="model.other_prof_info.job_title" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="辦公室電話" path="model.other_prof_info.office_tel">
+            <n-form-item label="辦公室電話" path="other_prof_info.office_tel">
                 <n-input v-model:value="model.other_prof_info.office_tel" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="地址" path="model.other_prof_info.address">
+            <n-form-item label="地址" path="other_prof_info.address">
                 <n-input v-model:value="model.other_prof_info.address" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="銀行帳戶" path="model.other_prof_info.bank_account">
+            <n-form-item label="銀行帳戶" path="other_prof_info.bank_account">
                 <n-input v-model:value="model.other_prof_info.bank_account" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
         </n-space>
 
         <n-space v-if="model.type == '業界專家'" vertical>
-            <n-form-item label="公司名稱" path="model.expert_info.company_name">
+            <n-form-item label="公司名稱" path="expert_info.company_name">
                 <n-input v-model:value="model.expert_info.company_name" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="職稱" path="model.expert_info.job_title">
+            <n-form-item label="職稱" path="expert_info.job_title">
                 <n-input v-model:value="model.expert_info.job_title" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="辦公室電話" path="model.expert_info.office_tel">
+            <n-form-item label="辦公室電話" path="expert_info.office_tel">
                 <n-input v-model:value="model.expert_info.office_tel" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="地址" path="model.expert_info.address">
+            <n-form-item label="地址" path="expert_info.address">
                 <n-input v-model:value="model.expert_info.address" placeholder="" maxlength="30" show-count clearable />
             </n-form-item>
-            <n-form-item label="銀行帳戶" path="model.expert_info.bank_account">
+            <n-form-item label="銀行帳戶" path="expert_info.bank_account">
                 <n-input v-model:value="model.expert_info.bank_account" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
         </n-space>
 
         <n-space v-if="model.type == '學生'" vertical>
-            <n-form-item label="學號" path="model.student_info.student_id">
+            <n-form-item label="學號" path="student_info.student_id">
                 <n-input v-model:value="model.student_info.student_id" placeholder="" maxlength="8" show-count
                     clearable />
             </n-form-item>
-            <n-form-item label="學制" path="model.student_info.program">
+            <n-form-item label="學制" path="student_info.program">
                 <n-select v-model:value="model.student_info.program" placeholder="大學部" :options="programTypeOptions" />
             </n-form-item>
-            <n-form-item label="年級" path="model.student_info.study_year">
+            <n-form-item label="年級" path="student_info.study_year">
                 <n-select v-model:value="model.student_info.study_year" placeholder="一年級" :options="studyYearOptions" />
             </n-form-item>
         </n-space>

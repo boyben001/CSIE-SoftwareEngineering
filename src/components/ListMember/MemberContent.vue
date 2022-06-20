@@ -3,9 +3,12 @@
         <n-gi offset="1" span="10">
             <n-card v-if="person.name != null" size="huge" style="margin-top: 10vh">
                 <n-space justify="end">
-                    <n-button type="info">
-                        編輯
-                    </n-button>
+                    <router-link :to="`/edit-person/${personId}`" style="text-decoration:none;">
+                        <n-button type="info">
+                            編輯
+                        </n-button>
+                    </router-link>
+
                     <n-button type="error">
                         刪除
                     </n-button>
