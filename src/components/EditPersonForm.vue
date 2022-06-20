@@ -1,7 +1,5 @@
 <template>
-    {{personId}}
-    <pre>{{ person }}</pre>
-    <!-- <n-h1 style="font-weight: bold; padding-top: 5%;">編輯人員</n-h1>
+    <n-h1 style="font-weight: bold; padding-top: 5%;">編輯人員</n-h1>
     <n-form ref="formRef" :model="model" :rules="rules" label-placement="left" require-mark-placement="right-hanging"
         :size="size" label-width="auto" :style="{
             maxWidth: '100%'
@@ -109,7 +107,7 @@
         </n-space>
     </n-form>
 
-    <pre>{{ JSON.stringify(model, null, 2) }}</pre> -->
+    <pre>{{ JSON.stringify(model, null, 2) }}</pre>
 </template>
 
 <script>
@@ -121,8 +119,6 @@ import modelForm from './AddPerson/model.js'
 import {personTypeOptions, programTypeOptions, studyYearOptions} from './AddPerson/options.js'
 
 
-const model = reactive(modelForm);
-
 export default defineComponent({
     computed: {
         personId() {
@@ -131,7 +127,8 @@ export default defineComponent({
     },
     data() {
         return {
-            person: {}
+            person: {},
+            model: {}
         };
     },
     watch: {
@@ -146,14 +143,13 @@ export default defineComponent({
         return {
             formRef,
             size: ref("medium"),
-            model,
             personTypeOptions,
             programTypeOptions,
             studyYearOptions,
             rules,
         };
     },
-    
+
     methods: {
         async getPerson(id) {
             // 獲取Cookies當中的login資訊並取得token
@@ -172,10 +168,16 @@ export default defineComponent({
                 })
                     .then((response) => {
                         console.log(response)
+                        this.model = response.data
                         return response.data
                     })
             }
         }
+    },
+    async mounted(){
+        this.model = reactive(modelForm);
+        console.log("id: ", this.$route.params.personId)
+        await this.getPerson(this.$route.params.personId)
     }
 })
 </script>
