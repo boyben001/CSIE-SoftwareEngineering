@@ -5,8 +5,8 @@
             <n-tag type="info" round>時間：{{ meeting.time }}</n-tag>
             <n-tag type="info" round>地點：{{ meeting.location }}</n-tag>
             <n-tag type="info" round>類型：{{ meeting.type }}</n-tag>
-            <n-tag type="info" round>主席：{{ meeting.chair_id }}</n-tag>
-            <n-tag type="info" round>紀錄：{{ meeting.minute_taker_id }}</n-tag>
+            <n-tag type="info" round>主席：{{ allPersonNames[meeting.chair_id-1] }}</n-tag>
+            <n-tag type="info" round>紀錄：{{ allPersonNames[meeting.minute_taker_id-1] }}</n-tag>
         </n-space>
         <n-space vertical>
             <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">與會人員</n-h2>
@@ -14,7 +14,7 @@
                 <n-space v-for="(item, index) in meeting.attendee_association" :key="index"
                     style="margin: 0px !important">
                     <n-tag type="info" v-if="item.is_present">
-                        {{ item.person_id }}
+                        {{ allPersonNames[item.person_id-1] }}
                     </n-tag>
                 </n-space>
             </n-space>
@@ -97,9 +97,14 @@ export default {
     components: {
         // SendButtonGroup
     },
+    async mounted(){
+        await this.getAllPerson()
+        console.log('所有名子: ', this.allPersonNames)
+    },
     data() {
         return {
-            meeting: {}
+            meeting: {},
+            allPersonNames: []
         };
     },
     computed: {
@@ -131,6 +136,32 @@ export default {
                     .then((response) => {
                         return response.data
                     })
+            }
+        },
+        async getAllPerson(){
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            let allPersonName = []
+            if (info){
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'get',
+                    url: 'http://127.0.0.1:8000/person/',
+                    headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    }, 
+                })
+                .then((response)=>{
+                    console.log('success', response)
+                    this.attendees = response.data
+                    for (var i = 0; i < response.data.length; i++) {
+                        allPersonName.push(response.data[i].name);
+                    }
+                    this.allPersonNames = allPersonName
+                    console.log('allPersonName:', this.personOptions)
+                })
             }
         }
     }
