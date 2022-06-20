@@ -1,6 +1,6 @@
 <template>
   <n-layout>
-    <n-scrollbar style="max-height: 100%; padding: 0% 5% " trigger="none">
+    <n-scrollbar style="max-height: 95vh; padding: 0% 5% " trigger="none">
       <EditPerson />
     </n-scrollbar>
   </n-layout>
