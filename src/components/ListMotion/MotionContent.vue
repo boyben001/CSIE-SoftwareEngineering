@@ -1,45 +1,25 @@
 <template>
     <n-card v-if="motion.description != null" size="huge" style="padding: 2rem;">
-        <n-grid :x-gap="12" :cols="1" item-responsive>
-            <n-grid-item>
-                <n-space style="margin: 2rem 0">
-                    <n-tag type="info" round>案由</n-tag>{{ motion.description }}
-                </n-space>
-                <n-space style="margin: 2rem 0">
-                    <n-tag type="info" round>狀態</n-tag>
-                    <n-tag v-if="motion.status === '結案'" type="primary" round> {{ motion.status }}</n-tag>
-                    <n-tag v-else-if="motion.status === '執行中'" type="warning" round> {{ motion.status }}</n-tag>
-                    <n-tag v-else-if="motion.status === '討論中'" type="error" round> {{ motion.status }}</n-tag>
-                </n-space>
-                <n-space vertical v-if="motion.content != ''" style="margin: 2rem 0;align-items: flex-start;">
-                    <n-tag type="info" round>內容</n-tag>
-                    <n-card>
-                        <template #action>
-                            {{ motion.content }}
-                        </template>
-                    </n-card>
-                </n-space>
-                <n-space vertical v-if="motion.resolution != ''" style="margin: 2rem 0;align-items: flex-start">
-                    <n-tag type="info" round>決策</n-tag>
-                    <n-card>
-                        <template #action>
-                            {{ motion.resolution }}
-                        </template>
-                    </n-card>
-                </n-space>
-                <n-space vertical v-if="motion.execution != ''" style="margin: 2rem 0;align-items: flex-start">
-                    <n-tag type="info" round>執行</n-tag>
-                    <n-card>
-                        <template #action>
-                            {{ motion.execution }}
-                        </template>
-                    </n-card>
-                </n-space>
-            </n-grid-item>
-            <n-grid-item>
-
-            </n-grid-item>
-        </n-grid>
+        <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">討論事項</n-h2>
+        <n-descriptions label-placement="left" size="large" column="1">
+            <n-descriptions-item label="案由" style="padding-left:5">
+                {{ motion.description }}
+            </n-descriptions-item>
+            <n-descriptions-item label="狀態">
+                <n-tag v-if="motion.status === '結案'" type="primary" round> {{ motion.status }}</n-tag>
+                <n-tag v-else-if="motion.status === '執行中'" type="warning" round> {{ motion.status }}</n-tag>
+                <n-tag v-else-if="motion.status === '討論中'" type="error" round> {{ motion.status }}</n-tag>
+            </n-descriptions-item>
+            <n-descriptions-item label="內容">
+                {{ motion.content }}
+            </n-descriptions-item>
+            <n-descriptions-item label="決策">
+                {{ motion.resolution }}
+            </n-descriptions-item>
+            <n-descriptions-item label="執行">
+                {{ motion.execution }}
+            </n-descriptions-item>
+        </n-descriptions>
     </n-card>
 </template>
 
