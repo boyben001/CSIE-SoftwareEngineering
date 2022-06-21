@@ -60,6 +60,12 @@ const mainRoutes = [
         meta: { requireAuth: true }
     },
     {
+        path: '/edit-meeting/:meetingId',
+        name: 'editMeeting',
+        component: () => import('../views/EditMeetingView.vue'),
+        meta: { requireAuth: true }
+    },
+    {
         path: '/edit-person/:personId',
         name: 'editPerson',
         component: () => import('../views/EditPersonView.vue'),

@@ -1,5 +1,16 @@
 <template>
     <n-card v-if="meeting.title != null" style="padding: 2rem;">
+        <n-space justify="end">
+            <router-link :to="`/edit-meeting/${meetingId}`" style="text-decoration:none;">
+                <n-button type="info">
+                    編輯
+                </n-button>
+            </router-link>
+
+            <n-button type="error" @click="handleError">
+                刪除
+            </n-button>
+        </n-space>
         <n-h1 style="font-weight: bold;">{{ meeting.title }}</n-h1>
         <n-descriptions label-placement="left" size="large" :column=1>
             <n-descriptions-item label="時間">
@@ -66,7 +77,7 @@
                         {{ allPersonNames[meeting.chair_id - 1] }}
                     </n-descriptions-item>
                     <n-descriptions-item label="決策">
-                         {{ item.resolution }}
+                        {{ item.resolution }}
                     </n-descriptions-item>
                     <n-descriptions-item label="執行">
                         {{ item.execution }}
@@ -89,11 +100,35 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { defineComponent } from 'vue'
+import { useMessage, useDialog } from 'naive-ui'
 
-export default {
+export default defineComponent ({
     name: "MeetingContent",
-    components: {
-        // SendButtonGroup
+    setup() {
+        const message = useMessage()
+        const dialog = useDialog()
+        
+        return {
+            handleError() {
+                dialog.warning({
+                    // TODO: 後面加上 person.name
+                    title: '即將刪除',
+                    content: '已刪除的內容將無法復原',
+                    positiveText: '取消',
+                    positiveButtonProps: {'type':'tertiary'},
+                    negativeText: '刪除',
+                    negativeButtonProps: {'type':'warning'},
+                    maskClosable: false,
+                    onPositiveClick: () => {
+                        message.info('取消')
+                    },
+                    onNegativeClick: () => {
+                        message.success('已刪除')
+                    }
+                })
+            }
+        }
     },
     async mounted() {
         await this.getAllPerson()
@@ -163,5 +198,5 @@ export default {
             }
         }
     }
-}
+})
 </script>
