@@ -1,7 +1,7 @@
 <template>
     <n-card v-if="meeting.title != null" style="padding: 2rem;">
         <n-h1 style="font-weight: bold;">{{ meeting.title }}</n-h1>
-        <n-descriptions label-placement="left" size="large" column="1">
+        <n-descriptions label-placement="left" size="large" :column=1>
             <n-descriptions-item label="時間">
                 {{ meeting.time }}
             </n-descriptions-item>
@@ -50,7 +50,7 @@
             <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">討論事項</n-h2>
             <n-space vertical v-for="(item, index) in meeting.motions" :key="index">
                 <n-h3>提案 {{ index + 1 }}</n-h3>
-                <n-descriptions label-placement="left" size="large" column="1">
+                <n-descriptions label-placement="left" size="large" :column=1>
                     <n-descriptions-item label="案由" style="padding-left:5">
                         {{ item.description }}
                     </n-descriptions-item>

@@ -1,7 +1,7 @@
 <template>
     <n-card v-if="motion.description != null" size="huge" style="padding: 2rem;">
         <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">討論事項</n-h2>
-        <n-descriptions label-placement="left" size="large" column="1">
+        <n-descriptions label-placement="left" size="large" :column=1>
             <n-descriptions-item label="案由" style="padding-left:5">
                 {{ motion.description }}
             </n-descriptions-item>

@@ -9,7 +9,7 @@
                         </n-button>
                     </router-link>
 
-                    <n-button type="error">
+                    <n-button type="error" @click="handleError">
                         刪除
                     </n-button>
                 </n-space>
@@ -81,10 +81,35 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { defineComponent } from 'vue'
+import { useMessage, useDialog } from 'naive-ui'
 
-export default {
+export default defineComponent({
     name: "personContent",
-    components: {
+    setup() {
+        const message = useMessage()
+        const dialog = useDialog()
+        
+        return {
+            handleError() {
+                dialog.warning({
+                    // TODO: 後面加上 person.name
+                    title: '即將刪除',
+                    content: '已刪除的內容將無法復原',
+                    positiveText: '取消',
+                    positiveButtonProps: {'type':'tertiary'},
+                    negativeText: '刪除',
+                    negativeButtonProps: {'type':'warning'},
+                    maskClosable: false,
+                    onPositiveClick: () => {
+                        message.info('取消')
+                    },
+                    onNegativeClick: () => {
+                        message.success('已刪除')
+                    }
+                })
+            }
+        }
     },
     data() {
         return {
@@ -124,7 +149,7 @@ export default {
             }
         }
     }
-}
+})
 </script>
 
 <style scoped>
