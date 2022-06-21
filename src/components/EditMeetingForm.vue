@@ -1,5 +1,13 @@
 <template>
-    <n-h1 style="font-weight: bold; padding-top: 5%;">編輯會議</n-h1>
+    <n-space justify="space-between" style="padding-top: 5%;">
+        <n-h1 style="font-weight: bold">編輯會議</n-h1>
+
+        <router-link :to="`/meeting`" style="text-decoration:none;">
+            <n-button type="info">
+                返回
+            </n-button>
+        </router-link>
+    </n-space>
     <n-form ref="formRef" :model="model" :rules="rules" label-placement="left" require-mark-placement="right-hanging"
         :size="size" label-width="auto" :style="{
             maxWidth: '100%'
@@ -26,7 +34,7 @@
         </n-grid>
 
         <n-divider />
-
+        
         <n-h2>出席人員</n-h2>
         <n-form-item label="主席" path="chair_id">
             <n-select v-model:value="model.chair_id" placeholder="選擇一項" :options="personOptions" />
@@ -190,20 +198,20 @@ import rules from './AddMeeting/rules.js'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 
-import {meetingTypeOptions, statusOptions} from './AddMeeting/options.js'
+import { meetingTypeOptions, statusOptions } from './AddMeeting/options.js'
 export default defineComponent({
     components: {
         ArchiveIcon
     },
-    async mounted(){
+    async mounted() {
         await this.getAllPerson()
         this.personOptions = this.personOptions.map((v, i) => ({
             label: v,
-            value: i+1
+            value: i + 1
         }));
     },
-    data(){
-        return{
+    data() {
+        return {
             personOptions: []
         }
     },
@@ -291,30 +299,30 @@ export default defineComponent({
                     })
             }
         },
-        async getAllPerson(){
+        async getAllPerson() {
             // 獲取Cookies當中的login資訊並取得token
             const info = Cookies.get('login')
             let allPersonName = []
-            if (info){
+            if (info) {
                 const token = JSON.parse(info).token
                 await axios({
                     method: 'get',
                     url: 'http://127.0.0.1:8000/person/',
                     headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    }, 
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
                 })
-                .then((response)=>{
-                    console.log('success', response)
-                    this.attendees = response.data
-                    for (var i = 0; i < response.data.length; i++) {
-                        allPersonName.push(response.data[i].name);
-                    }
-                    this.personOptions = allPersonName
-                    console.log('allPersonName:', this.personOptions)
-                })
+                    .then((response) => {
+                        console.log('success', response)
+                        this.attendees = response.data
+                        for (var i = 0; i < response.data.length; i++) {
+                            allPersonName.push(response.data[i].name);
+                        }
+                        this.personOptions = allPersonName
+                        console.log('allPersonName:', this.personOptions)
+                    })
             }
         }
     },

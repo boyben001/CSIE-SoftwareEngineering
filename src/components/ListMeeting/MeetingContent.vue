@@ -30,7 +30,26 @@
             </n-descriptions-item>
         </n-descriptions>
         <n-space vertical>
-            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">與會人員</n-h2>
+            <n-space style="margin: 1.5rem 0 0.5rem 0">
+                <n-h2>與會人員</n-h2>
+
+                <n-button strong secondary type="info" :loading="loadingNoticeRef" @click="handleNoticeClick">
+                    <template #icon>
+                        <n-icon>
+                            <NoticeIcon />
+                        </n-icon>
+                    </template>
+                    寄送會議通知
+                </n-button>
+                <n-button strong secondary type="success" :loading="loadingResultRef" @click="handleResultClick">
+                    <template #icon>
+                        <n-icon>
+                            <MailIcon />
+                        </n-icon>
+                    </template>
+                    寄送會議結果
+                </n-button>
+            </n-space>
             <n-grid :x-gap="12" :y-gap="8" :cols="12" item-responsive>
                 <n-grid-item v-for="(item, index) in meeting.attendee_association" :key="index"
                     span="4 400:3 600:2 800:1">
@@ -100,34 +119,75 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { defineComponent } from 'vue'
-import { useMessage, useDialog } from 'naive-ui'
+import { defineComponent, ref } from 'vue'
+import {
+    MailOutline as MailIcon,
+    NotificationsOutline as NoticeIcon
+} from '@vicons/ionicons5'
+import { useMessage, useDialog, useNotification } from 'naive-ui'
 
-export default defineComponent ({
+export default defineComponent({
     name: "MeetingContent",
+    components: {
+        MailIcon,
+        NoticeIcon,
+    },
     setup() {
         const message = useMessage()
         const dialog = useDialog()
-        
+        const loadingNoticeRef = ref(false)
+        const loadingResultRef = ref(false)
+        const notification = useNotification()
+
+        const handleError = () => {
+            dialog.warning({
+                // TODO: 後面加上 person.name
+                title: '即將刪除',
+                content: '已刪除的內容將無法復原',
+                positiveText: '取消',
+                positiveButtonProps: { 'type': 'tertiary' },
+                negativeText: '刪除',
+                negativeButtonProps: { 'type': 'warning' },
+                maskClosable: false,
+                onPositiveClick: () => {
+                    message.info('取消')
+                },
+                onNegativeClick: () => {
+                    message.success('已刪除')
+                }
+            })
+        };
+
+        // 寄送通知
+        const handleNoticeClick = () => {
+            loadingNoticeRef.value = true
+            setTimeout(() => {
+                loadingNoticeRef.value = false;
+                notification.info({
+                    title: "會議通知已送出",
+                    duration: 3000,
+                });
+            }, 2000)
+        };
+
+        // 寄送結果
+        const handleResultClick = () => {
+            loadingResultRef.value = true
+            setTimeout(() => {
+                loadingResultRef.value = false;
+                notification.success({
+                    title: "會議結果已送出",
+                    duration: 3000,
+                });
+            }, 2000)
+        };
+
         return {
-            handleError() {
-                dialog.warning({
-                    // TODO: 後面加上 person.name
-                    title: '即將刪除',
-                    content: '已刪除的內容將無法復原',
-                    positiveText: '取消',
-                    positiveButtonProps: {'type':'tertiary'},
-                    negativeText: '刪除',
-                    negativeButtonProps: {'type':'warning'},
-                    maskClosable: false,
-                    onPositiveClick: () => {
-                        message.info('取消')
-                    },
-                    onNegativeClick: () => {
-                        message.success('已刪除')
-                    }
-                })
-            }
+            handleError,
+            handleNoticeClick,
+            handleResultClick,
+            loadingNoticeRef,
+            loadingResultRef,
         }
     },
     async mounted() {
