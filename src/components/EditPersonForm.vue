@@ -23,9 +23,8 @@
             <n-input v-model:value="model.email" placeholder="example@example" maxlength="30" show-count clearable />
         </n-form-item>
         <n-form-item label="類型" path="type">
-            <n-select v-model:value="model.type" placeholder="" :options="personTypeOptions" />
+            <n-select v-model:value="model.type" placeholder="" :options="personTypeOptions"/>
         </n-form-item>
-
         <n-space v-if="model.type == '系上教師'" vertical>
             <n-form-item label="職稱" path="dept_prof_info.job_title">
                 <n-input v-model:value="model.dept_prof_info.job_title" placeholder="" maxlength="30" show-count
@@ -105,6 +104,9 @@
                 <n-select v-model:value="model.student_info.study_year" placeholder="一年級" :options="studyYearOptions" />
             </n-form-item>
         </n-space>
+        <n-button type="success" @click="editPerson">
+            確定修改人員
+        </n-button>
     </n-form>
 
     <pre>{{ JSON.stringify(model, null, 2) }}</pre>
@@ -135,11 +137,11 @@ export default defineComponent({
         personId: async function (val) {
             console.log(val);
             this.person = await this.getPerson(val);
-        }
+        },
     },
     setup() {
         const formRef = ref(null);
-
+        //const model = reactive(modelForm);
         return {
             formRef,
             size: ref("medium"),
@@ -166,17 +168,59 @@ export default defineComponent({
                         'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
                     },
                 })
+                .then((response) => {
+                    this.model['name'] = response.data['name']
+                    this.model['gender'] = response.data['gender']
+                    this.model['phone'] = response.data['phone']
+                    this.model['email'] = response.data['email']
+                    this.model['type'] = response.data['type']
+
+                    if (Object.prototype.hasOwnProperty.call(response.data, "student_info")){
+                        this.model['student_info'] = response.data['student_info']
+                    }
+                    if (Object.prototype.hasOwnProperty.call(response.data, "other_prof_info")){
+                        this.model['other_prof_info'] = response.data['other_prof_info']
+                    }
+                    if (Object.prototype.hasOwnProperty.call(response.data, "dept_prof_info")){
+                        this.model['dept_prof_info'] = response.data['dept_prof_info']
+                    }
+                    if (Object.prototype.hasOwnProperty.call(response.data, "assistant_info")){
+                        this.model['assistant_info'] = response.data['assistant_info']
+                    }
+                    if (Object.prototype.hasOwnProperty.call(response.data, "expert_info")){
+                        this.model['expert_info'] = response.data['expert_info']
+                    }
+                    return response.data
+                })
+            }
+        },
+        async editPerson() {
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            const url = 'http://127.0.0.1:8000/person/'+ this.personId
+            if (info) {
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'put',
+                    url: url,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                    data: JSON.stringify(this.model, null, 2)
+                })
                     .then((response) => {
-                        console.log(response)
-                        this.model = response.data
-                        return response.data
+                        console.log('success', response)
+                    })
+                    .catch((error) => {
+                        console.log('errorrr', error.response.data)
                     })
             }
-        }
+        },
     },
     async mounted(){
         this.model = reactive(modelForm);
-        console.log("id: ", this.personId)
         await this.getPerson(this.personId)
     }
 })

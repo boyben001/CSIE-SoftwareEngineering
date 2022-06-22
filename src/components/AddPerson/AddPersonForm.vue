@@ -105,18 +105,21 @@
                 <n-select v-model:value="model.student_info.study_year" placeholder="一年級" :options="studyYearOptions" />
             </n-form-item>
         </n-space>
+        <n-button type="success" @click="createPerson">
+            確定新增人員
+        </n-button>
     </n-form>
 
     <pre>{{ JSON.stringify(model, null, 2) }}</pre>
 </template>
 
 <script>
+import Cookies from 'js-cookie'
+import axios from 'axios'
 import { defineComponent, ref, reactive } from "vue";
 import rules from './rules.js'
 import modelForm from './model.js'
 import {personTypeOptions, programTypeOptions, studyYearOptions} from './options.js'
-
-console.log(personTypeOptions);
 
 export default defineComponent({
     setup() {
@@ -133,5 +136,31 @@ export default defineComponent({
             rules,
         };
     },
+    methods: {
+        async createPerson() {
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            const url = 'http://127.0.0.1:8000/person/'
+            if (info) {
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'post',
+                    url: url,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                    data: JSON.stringify(this.model, null, 2)
+                })
+                    .then((response) => {
+                        console.log('success', response)
+                    })
+                    .catch((error) => {
+                        console.log('errorrr', error.response.data)
+                    })
+            }
+        },
+    }
 })
 </script>
