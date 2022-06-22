@@ -1,103 +1,196 @@
 <template>
-    <n-card style="padding: 2rem;">
-        <n-h1>{{ meeting.title }}</n-h1>
-        <n-space vertical>
-            <n-tag type="info" round>時間：{{ meeting.time }}</n-tag>
-            <n-tag type="info" round>地點：{{ meeting.location }}</n-tag>
-            <n-tag type="info" round>類型：{{ meeting.type }}</n-tag>
-            <n-tag type="info" round>主席：{{ allPersonNames[meeting.chair_id-1] }}</n-tag>
-            <n-tag type="info" round>紀錄：{{ allPersonNames[meeting.minute_taker_id-1] }}</n-tag>
+    <n-card v-if="meeting.title != null" style="padding: 2rem;">
+        <n-space justify="end">
+            <router-link :to="`/edit-meeting/${meetingId}`" style="text-decoration:none;">
+                <n-button type="info">
+                    編輯
+                </n-button>
+            </router-link>
+
+            <n-button type="error" @click="handleError">
+                刪除
+            </n-button>
         </n-space>
+        <n-h1 style="font-weight: bold;">{{ meeting.title }}</n-h1>
+        <n-descriptions label-placement="left" size="large" :column=1>
+            <n-descriptions-item label="時間">
+                {{ meeting.time }}
+            </n-descriptions-item>
+            <n-descriptions-item label="地點">
+                {{ meeting.location }}
+            </n-descriptions-item>
+            <n-descriptions-item label="類型">
+                {{ meeting.type }}
+            </n-descriptions-item>
+            <n-descriptions-item label="主席">
+                {{ allPersonNames[meeting.chair_id - 1] }}
+            </n-descriptions-item>
+            <n-descriptions-item label="紀錄">
+                {{ allPersonNames[meeting.minute_taker_id - 1] }}
+            </n-descriptions-item>
+        </n-descriptions>
         <n-space vertical>
-            <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">與會人員</n-h2>
-            <n-space>
-                <n-space v-for="(item, index) in meeting.attendee_association" :key="index"
-                    style="margin: 0px !important">
-                    <n-tag type="info" v-if="item.is_present">
-                        {{ allPersonNames[item.person_id-1] }}
-                    </n-tag>
-                </n-space>
+            <n-space style="margin: 1.5rem 0 0.5rem 0">
+                <n-h2>與會人員</n-h2>
+
+                <n-button strong secondary type="info" :loading="loadingNoticeRef" @click="handleNoticeClick">
+                    <template #icon>
+                        <n-icon>
+                            <NoticeIcon />
+                        </n-icon>
+                    </template>
+                    寄送會議通知
+                </n-button>
+                <n-button strong secondary type="success" :loading="loadingResultRef" @click="handleResultClick">
+                    <template #icon>
+                        <n-icon>
+                            <MailIcon />
+                        </n-icon>
+                    </template>
+                    寄送會議結果
+                </n-button>
             </n-space>
+            <n-grid :x-gap="12" :y-gap="8" :cols="12" item-responsive>
+                <n-grid-item v-for="(item, index) in meeting.attendee_association" :key="index"
+                    span="4 400:3 600:2 800:1">
+                    <n-tag type="info" v-if="item.is_present">
+                        {{ allPersonNames[item.person_id - 1] }}
+                    </n-tag>
+                    <n-tag type="error" v-if="!item.is_present">
+                        {{ allPersonNames[item.person_id - 1] }}
+                    </n-tag>
+                </n-grid-item>
+            </n-grid>
         </n-space>
         <n-space vertical>
             <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">主席致詞</n-h2>
-            <n-card>
-                <template #action>
-                    {{ meeting.chair_speech }}
-                </template>
-            </n-card>
+            <n-text>
+                {{ meeting.chair_speech }}
+            </n-text>
         </n-space>
         <n-space vertical>
             <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">報告事項</n-h2>
-            <n-space v-for="(item, index) in meeting.announcements" :key="index">
-                <br>
-                {{ index + 1 }}. {{ item.content }}
-            </n-space>
+            <n-ol>
+                <n-li v-for="(item, index) in meeting.announcements" :key="index">
+                    {{ item.content }}
+                </n-li>
+            </n-ol>
         </n-space>
         <n-space vertical>
             <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">討論事項</n-h2>
-            <n-space vertical v-for="(item, index) in meeting.motions" :key="index"
-                style="padding: 0.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">
-                <n-space>
-                    <n-tag type="info" round>提案</n-tag>{{ index + 1 }}
-                </n-space>
-                <n-space>
-                    <n-tag type="info" round>案由</n-tag>{{ item.description }}
-                </n-space>
-                <n-space>
-                    <n-tag type="info" round>狀態</n-tag>
-                    <n-tag v-if="item.status === '結案'" type="primary" round> {{ item.status }}</n-tag>
-                    <n-tag v-else-if="item.status === '執行中'" type="warning" round> {{ item.status }}</n-tag>
-                    <n-tag v-else-if="item.status === '討論中'" type="error" round> {{ item.status }}</n-tag>
-                </n-space>
-                <n-space v-if="item.content != ''" style="align-items: center">
-                    <n-tag type="info" round>內容</n-tag>
-                    <n-card>
-                        <template #action>
-                            {{ item.content }}
-                        </template>
-                    </n-card>
-                </n-space>
-                <n-space v-if="item.resolution != ''" style="align-items: center">
-                    <n-tag type="info" round>決策</n-tag>
-                    <n-card>
-                        <template #action>
-                            {{ item.resolution }}
-                        </template>
-                    </n-card>
-                </n-space>
-                <n-space v-if="item.execution != ''" style="align-items: center">
-                    <n-tag type="info" round>執行</n-tag>
-                    <n-card>
-                        <template #action>
-                            {{ item.execution }}
-                        </template>
-                    </n-card>
-                </n-space>
+            <n-space vertical v-for="(item, index) in meeting.motions" :key="index">
+                <n-h3>提案 {{ index + 1 }}</n-h3>
+                <n-descriptions label-placement="left" size="large" :column=1>
+                    <n-descriptions-item label="案由" style="padding-left:5">
+                        {{ item.description }}
+                    </n-descriptions-item>
+                    <n-descriptions-item label="狀態">
+                        <n-tag v-if="item.status === '結案'" type="primary" round> {{ item.status }}</n-tag>
+                        <n-tag v-else-if="item.status === '執行中'" type="warning" round> {{ item.status }}</n-tag>
+                        <n-tag v-else-if="item.status === '討論中'" type="error" round> {{ item.status }}</n-tag>
+                    </n-descriptions-item>
+                    <n-descriptions-item label="內容">
+                        {{ item.content }}
+                    </n-descriptions-item>
+                    <n-descriptions-item label="主席">
+                        {{ allPersonNames[meeting.chair_id - 1] }}
+                    </n-descriptions-item>
+                    <n-descriptions-item label="決策">
+                        {{ item.resolution }}
+                    </n-descriptions-item>
+                    <n-descriptions-item label="執行">
+                        {{ item.execution }}
+                    </n-descriptions-item>
+                </n-descriptions>
+                <n-divider></n-divider>
             </n-space>
         </n-space>
         <n-space vertical>
             <n-h2 style="margin: 1.5rem 0 0.5rem 0; border-bottom: 1.5px solid #dee2e6 ">臨時動議</n-h2>
-            <n-space v-for="(item, index) in meeting.extempores" :key="index">
-                <br>
-                {{ index + 1 }}. {{ item.content }}
-            </n-space>
+            <n-ol>
+                <n-li v-for="(item, index) in meeting.extempores" :key="index">
+                    {{ item.content }}
+                </n-li>
+            </n-ol>
         </n-space>
     </n-card>
-    <!-- {{ this.$route.params.meetingId }} -->
-    <!-- <pre>{{ meeting }}</pre> -->
 </template>
 
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { defineComponent, ref } from 'vue'
+import {
+    MailOutline as MailIcon,
+    NotificationsOutline as NoticeIcon
+} from '@vicons/ionicons5'
+import { useMessage, useDialog, useNotification } from 'naive-ui'
 
-export default {
+export default defineComponent({
     name: "MeetingContent",
     components: {
-        // SendButtonGroup
+        MailIcon,
+        NoticeIcon,
     },
-    async mounted(){
+    setup() {
+        const message = useMessage()
+        const dialog = useDialog()
+        const loadingNoticeRef = ref(false)
+        const loadingResultRef = ref(false)
+        const notification = useNotification()
+
+        const handleError = () => {
+            dialog.warning({
+                // TODO: 後面加上 person.name
+                title: '即將刪除',
+                content: '已刪除的內容將無法復原',
+                positiveText: '取消',
+                positiveButtonProps: { 'type': 'tertiary' },
+                negativeText: '刪除',
+                negativeButtonProps: { 'type': 'warning' },
+                maskClosable: false,
+                onPositiveClick: () => {
+                    message.info('取消')
+                },
+                onNegativeClick: () => {
+                    message.success('已刪除')
+                }
+            })
+        };
+
+        // 寄送通知
+        const handleNoticeClick = () => {
+            loadingNoticeRef.value = true
+            setTimeout(() => {
+                loadingNoticeRef.value = false;
+                notification.info({
+                    title: "會議通知已送出",
+                    duration: 3000,
+                });
+            }, 2000)
+        };
+
+        // 寄送結果
+        const handleResultClick = () => {
+            loadingResultRef.value = true
+            setTimeout(() => {
+                loadingResultRef.value = false;
+                notification.success({
+                    title: "會議結果已送出",
+                    duration: 3000,
+                });
+            }, 2000)
+        };
+
+        return {
+            handleError,
+            handleNoticeClick,
+            handleResultClick,
+            loadingNoticeRef,
+            loadingResultRef,
+        }
+    },
+    async mounted() {
         await this.getAllPerson()
         console.log('所有名子: ', this.allPersonNames)
     },
@@ -138,32 +231,32 @@ export default {
                     })
             }
         },
-        async getAllPerson(){
+        async getAllPerson() {
             // 獲取Cookies當中的login資訊並取得token
             const info = Cookies.get('login')
             let allPersonName = []
-            if (info){
+            if (info) {
                 const token = JSON.parse(info).token
                 await axios({
                     method: 'get',
                     url: 'http://127.0.0.1:8000/person/',
                     headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    }, 
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
                 })
-                .then((response)=>{
-                    console.log('success', response)
-                    this.attendees = response.data
-                    for (var i = 0; i < response.data.length; i++) {
-                        allPersonName.push(response.data[i].name);
-                    }
-                    this.allPersonNames = allPersonName
-                    console.log('allPersonName:', this.personOptions)
-                })
+                    .then((response) => {
+                        console.log('success', response)
+                        this.attendees = response.data
+                        for (var i = 0; i < response.data.length; i++) {
+                            allPersonName.push(response.data[i].name);
+                        }
+                        this.allPersonNames = allPersonName
+                        console.log('allPersonName:', this.personOptions)
+                    })
             }
         }
     }
-}
+})
 </script>

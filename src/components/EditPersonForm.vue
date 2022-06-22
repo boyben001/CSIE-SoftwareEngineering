@@ -1,5 +1,13 @@
 <template>
-    <n-h1 style="font-weight: bold; padding-top: 5%;">編輯人員</n-h1>
+    <n-space justify="space-between" style="padding-top: 5%;">
+        <n-h1 style="font-weight: bold">編輯人員</n-h1>
+
+        <router-link :to="`/member`" style="text-decoration:none;">
+            <n-button type="info">
+                返回
+            </n-button>
+        </router-link>
+    </n-space>
     <n-form ref="formRef" :model="model" :rules="rules" label-placement="left" require-mark-placement="right-hanging"
         :size="size" label-width="auto" :style="{
             maxWidth: '100%'
@@ -118,7 +126,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import rules from './AddPerson/rules.js'
 import modelForm from './AddPerson/model.js'
-import {personTypeOptions, programTypeOptions, studyYearOptions} from './AddPerson/options.js'
+import { personTypeOptions, programTypeOptions, studyYearOptions } from './AddPerson/options.js'
 
 
 export default defineComponent({
@@ -219,7 +227,7 @@ export default defineComponent({
             }
         },
     },
-    async mounted(){
+    async mounted() {
         this.model = reactive(modelForm);
         await this.getPerson(this.personId)
     }

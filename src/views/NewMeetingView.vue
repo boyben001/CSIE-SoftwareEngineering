@@ -1,6 +1,6 @@
 <template>
   <n-layout>
-    <n-scrollbar style="max-height: 100vh; padding: 0% 5% " trigger="none">
+    <n-scrollbar style="max-height: 95vh; padding: 0% 5% " trigger="none">
       <AddMeeting />
     </n-scrollbar>
   </n-layout>
