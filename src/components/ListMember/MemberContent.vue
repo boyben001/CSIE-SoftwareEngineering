@@ -116,6 +116,9 @@ export default defineComponent({
             person: {}
         };
     },
+    async mounted() {
+        this.person = await this.getPerson(this.$route.params.personId);
+    },
     computed: {
         personId() {
             return this.$route.params.personId;

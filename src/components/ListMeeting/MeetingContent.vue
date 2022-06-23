@@ -192,7 +192,7 @@ export default defineComponent({
     },
     async mounted() {
         await this.getAllPerson()
-        console.log('所有名子: ', this.allPersonNames)
+        this.meeting = await this.getMeet(this.$route.params.meetingId);
     },
     data() {
         return {

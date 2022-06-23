@@ -47,6 +47,9 @@ export default {
             this.getMotion(this.$route.params.motionId - 1)
         }
     },
+    async mounted() {
+        this.getMotion(this.$route.params.motionId - 1)
+    },
     methods: {
         async getMotion(index) {
             // 獲取Cookies當中的login資訊並取得token
