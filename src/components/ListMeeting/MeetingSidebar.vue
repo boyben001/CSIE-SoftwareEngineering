@@ -6,9 +6,9 @@
                 <n-tag type="success">
                     {{ meet.type }}
                 </n-tag>
-                <n-text italic>
+                <n-text depth="3">
                     <br>
-                    {{ meet.time }}
+                    {{ format_date(meet.time) }}
                 </n-text>
             </router-link>
         </n-card>
@@ -18,6 +18,7 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import moment from 'moment'
 
 export default {
     name: "MeetingSidebar",
@@ -45,7 +46,12 @@ export default {
                         this.meets = response.data;
                     })
             }
-        }
+        },
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format('YYYY年MM月DD日 hh時mm分ss秒')
+            }
+        },
     },
     async mounted() {
         await this.getCurrentMeeting();

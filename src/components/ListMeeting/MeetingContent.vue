@@ -14,7 +14,7 @@
         <n-h1 style="font-weight: bold;">{{ meeting.title }}</n-h1>
         <n-descriptions label-placement="left" size="large" :column=1>
             <n-descriptions-item label="時間">
-                {{ meeting.time }}
+                {{ format_date(meeting.time) }}
             </n-descriptions-item>
             <n-descriptions-item label="地點">
                 {{ meeting.location }}
@@ -23,10 +23,18 @@
                 {{ meeting.type }}
             </n-descriptions-item>
             <n-descriptions-item label="主席">
-                {{ allPersonNames[meeting.chair_id - 1] }}
+                <router-link :to="`/member/${meeting.chair_id}`" style="text-decoration:none;">
+                    <n-button type="warning" dashed circle>
+                        {{ allPersonNames[meeting.chair_id - 1] }}
+                    </n-button>
+                </router-link>
             </n-descriptions-item>
             <n-descriptions-item label="紀錄">
-                {{ allPersonNames[meeting.minute_taker_id - 1] }}
+                <router-link :to="`/member/${meeting.minute_taker_id}`" style="text-decoration:none;">
+                    <n-button type="success" dashed circle>
+                        {{ allPersonNames[meeting.minute_taker_id - 1] }}
+                    </n-button>
+                </router-link>
             </n-descriptions-item>
         </n-descriptions>
         <n-space vertical>
@@ -50,15 +58,22 @@
                     寄送會議結果
                 </n-button>
             </n-space>
+
             <n-grid :x-gap="12" :y-gap="8" :cols="12" item-responsive>
                 <n-grid-item v-for="(item, index) in meeting.attendee_association" :key="index"
                     span="4 400:3 600:2 800:1">
-                    <n-tag type="info" v-if="item.is_present">
-                        {{ allPersonNames[item.person_id - 1] }}
-                    </n-tag>
-                    <n-tag type="error" v-if="!item.is_present">
-                        {{ allPersonNames[item.person_id - 1] }}
-                    </n-tag>
+                    <router-link v-if="item.is_present" :to="`/member/${item.person_id}`" style="text-decoration:none;">
+                        <n-button type="info" dashed size="small" round>
+                            {{ allPersonNames[item.person_id - 1] }}
+                        </n-button>
+                    </router-link>
+
+                    <router-link v-if="!item.is_present" :to="`/member/${item.person_id}`"
+                        style="text-decoration:none;">
+                        <n-button type="error" dashed size="small" round>
+                            {{ allPersonNames[item.person_id - 1] }}
+                        </n-button>
+                    </router-link>
                 </n-grid-item>
             </n-grid>
         </n-space>
@@ -125,6 +140,7 @@ import {
     NotificationsOutline as NoticeIcon
 } from '@vicons/ionicons5'
 import { useMessage, useDialog, useNotification } from 'naive-ui'
+import moment from 'moment'
 
 export default defineComponent({
     name: "MeetingContent",
@@ -256,7 +272,12 @@ export default defineComponent({
                         console.log('allPersonName:', this.personOptions)
                     })
             }
-        }
+        },
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format('YYYY年MM月DD日 hh時mm分ss秒')
+            }
+        },
     }
 })
 </script>
