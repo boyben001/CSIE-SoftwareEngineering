@@ -149,7 +149,8 @@ export default defineComponent({
                         data: JSON.stringify(model, null, 2)
                     })
                         .then((response) => {
-                            console.log('success', response)
+                            console.log('success', response.data.id)
+                            window.location.replace('/member/'+response.data.id)
                         })
                         .catch((error) => {
                             console.log('errorrr', error.response.data)
@@ -165,7 +166,6 @@ export default defineComponent({
                         } catch (exception) {
                             console.log("post error")
                         }
-
                         message.success("新增人員成功");
                     } else {
                         message.error("還有空格未填");
