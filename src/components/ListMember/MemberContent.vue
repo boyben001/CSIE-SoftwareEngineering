@@ -81,34 +81,90 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { defineComponent } from 'vue'
+import { defineComponent} from 'vue'
 import { useMessage, useDialog } from 'naive-ui'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
     name: "personContent",
     setup() {
         const message = useMessage()
         const dialog = useDialog()
+        const route = useRoute()
+        // const person = ref({})
+
+        // onMounted(async()=> {
+        //     person.value = await getPerson(route.params.personId)
+        //     console.log('iddddd', person.value.name)
+        // })
+
+        // const getPerson = async(id) => {
+        //     // 獲取Cookies當中的login資訊並取得token
+        //     const info = Cookies.get('login')
+        //     const url = 'http://127.0.0.1:8000/person/' + id
+        //     if (info) {
+        //         const token = JSON.parse(info).token
+        //         return await axios({
+        //             method: 'get',
+        //             url: url,
+        //             headers: {
+        //                 accept: 'application/json',
+        //                 'Content-Type': 'multipart/form-data',
+        //                 'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+        //             },
+        //         })
+        //             .then((response) => {
+        //                 console.log(response)
+        //                 return response.data
+        //             })
+        //     }
+        // }
+
+        const deletePerson = (id) => {
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            const url = 'http://127.0.0.1:8000/person/' + id
+            if (info) {
+                const token = JSON.parse(info).token
+                axios({
+                    method: 'delete',
+                    url: url,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                })
+                    .then((response) => {
+                        console.log(response)
+                    })
+            }
+        }
+        
+        const handleError = () => {
+            dialog.warning({
+                // TODO: 後面加上 person.name
+                title: '即將刪除',
+                content: '已刪除的內容將無法復原',
+                positiveText: '取消',
+                positiveButtonProps: {'type':'tertiary'},
+                negativeText: '刪除',
+                negativeButtonProps: {'type':'warning'},
+                maskClosable: false,
+                onPositiveClick: () => {
+                    message.info('取消')
+                },
+                onNegativeClick: async () => {
+                    deletePerson(route.params.personId)
+                    await message.success('已刪除')
+                    window.location.replace('/member/')
+                }
+            })
+        };
         
         return {
-            handleError() {
-                dialog.warning({
-                    // TODO: 後面加上 person.name
-                    title: '即將刪除',
-                    content: '已刪除的內容將無法復原',
-                    positiveText: '取消',
-                    positiveButtonProps: {'type':'tertiary'},
-                    negativeText: '刪除',
-                    negativeButtonProps: {'type':'warning'},
-                    maskClosable: false,
-                    onPositiveClick: () => {
-                        message.info('取消')
-                    },
-                    onNegativeClick: () => {
-                        message.success('已刪除')
-                    }
-                })
-            }
+            handleError,
+            deletePerson
         }
     },
     data() {
@@ -126,6 +182,7 @@ export default defineComponent({
     },
     watch: {
         personId: async function (val) {
+            console.log('eeeeee')
             this.person = await this.getPerson(val);
         }
     },
