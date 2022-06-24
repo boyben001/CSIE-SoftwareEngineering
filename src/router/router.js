@@ -42,6 +42,12 @@ const mainRoutes = [
         meta: { requireAuth: true }
     },
     {
+        path: '/archive',
+        name: 'archiveMeeting',
+        component: () => import('../views/ArchiveMeeting.vue'),
+        meta: { requireAuth: true }
+    },
+    {
         path: '/meeting/:meetingId',
         name: 'meetingContent',
         component: () => import('../views/ListMeetingView.vue'),

@@ -16,7 +16,8 @@ import {
   ListCircleSharp as MeetingList,
   BarChartSharp as MotionList,
   Person as PersonList,
-  PersonAdd as AddPerson
+  PersonAdd as AddPerson,
+  FileTrayFull as ArchiveMeeting
 } from "@vicons/ionicons5";
 
 function renderIcon(icon) {
@@ -93,6 +94,20 @@ const menuOptions = [
       ),
     key: "personList",
     icon: renderIcon(PersonList),
+  },
+  {
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'archiveMeeting',
+          }
+        },
+        { default: () => '封裝會議' }
+      ),
+    key: "archiveMeeting",
+    icon: renderIcon(ArchiveMeeting),
   }
 ]
 

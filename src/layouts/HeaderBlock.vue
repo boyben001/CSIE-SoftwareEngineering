@@ -12,6 +12,7 @@
           color: 'white',
           backgroundColor: 'purple'
         }">
+        <!-- TODO: 替換 current person name -->
           嗨嗨
         </n-avatar>
       </n-button>
@@ -38,7 +39,7 @@ const renderIcon = (icon) => {
   };
 };
 
-
+// TODO: 把串接處理
 const options = [
   {
     label: "👋 你好 嗨嗨",
@@ -54,12 +55,14 @@ const options = [
     label: "個人資料",
     key: "person_data",
     icon: renderIcon(UserIcon),
+    // person_id
     url: "/member/3"
   },
   {
     label: "編輯個人資料",
     key: "edit_person_data",
     icon: renderIcon(EditIcon),
+    // edit-person/person_id
     url: "/member/3"
   },
   {
