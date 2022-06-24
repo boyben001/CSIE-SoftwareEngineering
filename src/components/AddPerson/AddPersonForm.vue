@@ -105,9 +105,13 @@
                 <n-select v-model:value="model.student_info.study_year" placeholder="一年級" :options="studyYearOptions" />
             </n-form-item>
         </n-space>
-        <n-button type="success" @click="createPerson">
-            確定新增人員
-        </n-button>
+
+        <n-space justify="center">
+            <n-button type="success" @click="methods.handleValidateClick">
+                確定新增人員
+            </n-button>
+        </n-space>
+
     </n-form>
 
     <pre>{{ JSON.stringify(model, null, 2) }}</pre>
@@ -119,12 +123,56 @@ import axios from 'axios'
 import { defineComponent, ref, reactive } from "vue";
 import rules from './rules.js'
 import modelForm from './model.js'
-import {personTypeOptions, programTypeOptions, studyYearOptions} from './options.js'
+import { useMessage } from "naive-ui";
+import { personTypeOptions, programTypeOptions, studyYearOptions } from './options.js'
 
 export default defineComponent({
     setup() {
         const formRef = ref(null);
         const model = reactive(modelForm);
+        const message = useMessage();
+        const methods = {
+            async createPerson() {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                const url = 'http://127.0.0.1:8000/person/'
+                if (info) {
+                    const token = JSON.parse(info).token
+                    await axios({
+                        method: 'post',
+                        url: url,
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                        data: JSON.stringify(model, null, 2)
+                    })
+                        .then((response) => {
+                            console.log('success', response)
+                        })
+                        .catch((error) => {
+                            console.log('errorrr', error.response.data)
+                        })
+                }
+            },
+            handleValidateClick(e) {
+                e.preventDefault();
+                formRef.value?.validate((errors) => {
+                    if (!errors) {
+                        try {
+                            methods.createPerson();
+                        } catch (exception) {
+                            console.log("post error")
+                        }
+
+                        message.success("新增人員成功");
+                    } else {
+                        message.error("還有空格未填");
+                    }
+                });
+            }
+        };
 
         return {
             formRef,
@@ -134,33 +182,8 @@ export default defineComponent({
             programTypeOptions,
             studyYearOptions,
             rules,
+            methods,
         };
     },
-    methods: {
-        async createPerson() {
-            // 獲取Cookies當中的login資訊並取得token
-            const info = Cookies.get('login')
-            const url = 'http://127.0.0.1:8000/person/'
-            if (info) {
-                const token = JSON.parse(info).token
-                await axios({
-                    method: 'post',
-                    url: url,
-                    headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    },
-                    data: JSON.stringify(this.model, null, 2)
-                })
-                    .then((response) => {
-                        console.log('success', response)
-                    })
-                    .catch((error) => {
-                        console.log('errorrr', error.response.data)
-                    })
-            }
-        },
-    }
 })
 </script>
