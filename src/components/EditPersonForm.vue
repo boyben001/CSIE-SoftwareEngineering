@@ -13,7 +13,7 @@
             maxWidth: '100%'
         }">
         <n-h2>基本資訊</n-h2>
-        <n-form-item label="姓名" path="title">
+        <n-form-item label="姓名" path="name">
             <n-input v-model:value="model.name" placeholder="" maxlength="20" show-count clearable />
         </n-form-item>
         <n-form-item label="性別" path="gender">
@@ -31,7 +31,7 @@
             <n-input v-model:value="model.email" placeholder="example@example" maxlength="30" show-count clearable />
         </n-form-item>
         <n-form-item label="類型" path="type">
-            <n-select v-model:value="model.type" placeholder="" :options="personTypeOptions"/>
+            <n-select v-model:value="model.type" placeholder="" :options="personTypeOptions" />
         </n-form-item>
         <n-space v-if="model.type == '系上教師'" vertical>
             <n-form-item label="職稱" path="dept_prof_info.job_title">
@@ -112,46 +112,128 @@
                 <n-select v-model:value="model.student_info.study_year" placeholder="一年級" :options="studyYearOptions" />
             </n-form-item>
         </n-space>
-        <n-button type="success" @click="editPerson">
-            確定修改人員
-        </n-button>
+
+        <n-space justify="center">
+            <n-button type="success" @click="methods.handleValidateClick">
+                確定修改人員
+            </n-button>
+        </n-space>
     </n-form>
 
     <pre>{{ JSON.stringify(model, null, 2) }}</pre>
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, onMounted } from "vue";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import rules from './AddPerson/rules.js'
 import modelForm from './AddPerson/model.js'
+import { useMessage } from "naive-ui";
 import { personTypeOptions, programTypeOptions, studyYearOptions } from './AddPerson/options.js'
-
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
-    computed: {
-        personId() {
-            return this.$route.params.personId;
-        },
-    },
-    data() {
-        return {
-            person: {},
-            model: {}
-        };
-    },
-    watch: {
-        personId: async function (val) {
-            console.log(val);
-            this.person = await this.getPerson(val);
-        },
-    },
     setup() {
         const formRef = ref(null);
-        //const model = reactive(modelForm);
+        const message = useMessage();
+        const model = reactive(modelForm);
+        const route = useRoute()
+
+        const personId = route.params.personId
+
+        const methods = {
+            async getPerson(id) {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                const url = 'http://127.0.0.1:8000/person/' + id
+                if (info) {
+                    const token = JSON.parse(info).token
+                    return await axios({
+                        method: 'get',
+                        url: url,
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                    })
+                        .then((response) => {
+                            model['name'] = response.data['name']
+                            model['gender'] = response.data['gender']
+                            model['phone'] = response.data['phone']
+                            model['email'] = response.data['email']
+                            model['type'] = response.data['type']
+
+                            if (Object.prototype.hasOwnProperty.call(response.data, "student_info")) {
+                                model['student_info'] = response.data['student_info']
+                            }
+                            if (Object.prototype.hasOwnProperty.call(response.data, "other_prof_info")) {
+                                model['other_prof_info'] = response.data['other_prof_info']
+                            }
+                            if (Object.prototype.hasOwnProperty.call(response.data, "dept_prof_info")) {
+                                model['dept_prof_info'] = response.data['dept_prof_info']
+                            }
+                            if (Object.prototype.hasOwnProperty.call(response.data, "assistant_info")) {
+                                model['assistant_info'] = response.data['assistant_info']
+                            }
+                            if (Object.prototype.hasOwnProperty.call(response.data, "expert_info")) {
+                                model['expert_info'] = response.data['expert_info']
+                            }
+                            return response.data
+                        })
+                }
+            },
+            async editPerson(personId) {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                const url = 'http://127.0.0.1:8000/person/' + personId
+                if (info) {
+                    const token = JSON.parse(info).token
+                    await axios({
+                        method: 'put',
+                        url: url,
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                        data: JSON.stringify(model, null, 2)
+                    })
+                        .then((response) => {
+                            console.log('success', response)
+                            window.location.replace('/member/'+ personId)
+                        })
+                        .catch((error) => {
+                            console.log('errorrr', error.response.data)
+                        })
+                }
+            },
+            handleValidateClick(e) {
+                e.preventDefault();
+                formRef.value?.validate((errors) => {
+                    if (!errors) {
+                        try {
+                            methods.editPerson(personId);
+                        } catch (exception) {
+                            console.log("put error")
+                        }
+                        message.success("編輯人員成功");
+                    } else {
+                        message.error("還有空格未填");
+                    }
+                });
+            }
+        }
+
+        onMounted(() => {
+            methods.getPerson(personId)
+        })
+
         return {
             formRef,
+            model,
+            methods,
             size: ref("medium"),
             personTypeOptions,
             programTypeOptions,
@@ -159,77 +241,5 @@ export default defineComponent({
             rules,
         };
     },
-
-    methods: {
-        async getPerson(id) {
-            // 獲取Cookies當中的login資訊並取得token
-            const info = Cookies.get('login')
-            const url = 'http://127.0.0.1:8000/person/' + id
-            if (info) {
-                const token = JSON.parse(info).token
-                return await axios({
-                    method: 'get',
-                    url: url,
-                    headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    },
-                })
-                .then((response) => {
-                    this.model['name'] = response.data['name']
-                    this.model['gender'] = response.data['gender']
-                    this.model['phone'] = response.data['phone']
-                    this.model['email'] = response.data['email']
-                    this.model['type'] = response.data['type']
-
-                    if (Object.prototype.hasOwnProperty.call(response.data, "student_info")){
-                        this.model['student_info'] = response.data['student_info']
-                    }
-                    if (Object.prototype.hasOwnProperty.call(response.data, "other_prof_info")){
-                        this.model['other_prof_info'] = response.data['other_prof_info']
-                    }
-                    if (Object.prototype.hasOwnProperty.call(response.data, "dept_prof_info")){
-                        this.model['dept_prof_info'] = response.data['dept_prof_info']
-                    }
-                    if (Object.prototype.hasOwnProperty.call(response.data, "assistant_info")){
-                        this.model['assistant_info'] = response.data['assistant_info']
-                    }
-                    if (Object.prototype.hasOwnProperty.call(response.data, "expert_info")){
-                        this.model['expert_info'] = response.data['expert_info']
-                    }
-                    return response.data
-                })
-            }
-        },
-        async editPerson() {
-            // 獲取Cookies當中的login資訊並取得token
-            const info = Cookies.get('login')
-            const url = 'http://127.0.0.1:8000/person/'+ this.personId
-            if (info) {
-                const token = JSON.parse(info).token
-                await axios({
-                    method: 'put',
-                    url: url,
-                    headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    },
-                    data: JSON.stringify(this.model, null, 2)
-                })
-                    .then((response) => {
-                        console.log('success', response)
-                    })
-                    .catch((error) => {
-                        console.log('errorrr', error.response.data)
-                    })
-            }
-        },
-    },
-    async mounted() {
-        this.model = reactive(modelForm);
-        await this.getPerson(this.personId)
-    }
 })
 </script>
