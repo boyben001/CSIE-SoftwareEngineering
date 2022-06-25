@@ -35,7 +35,7 @@
             <n-select v-model:value="model.minute_taker_id" placeholder="選擇一項" :options="personOptions" />
         </n-form-item>
         <n-form-item label="與會人員" path="attendees">
-            <n-select v-model:value="model.attendees" placeholder="選擇多項" :options="personOptions" multiple />
+            <n-select v-model:value="tempAttendees" placeholder="選擇多項" :options="personOptions" multiple />
         </n-form-item>
 
         <n-divider />
@@ -198,13 +198,14 @@ export default defineComponent({
     async mounted(){
         await this.getAllPerson()
         this.personOptions = this.personOptions.map((v, i) => ({
-            label: v,
-            value: i+1
+            label: this.personOptions[i].name,
+            value: this.personOptions[i].id
         }));
     },
     data(){
         return{
-            personOptions: []
+            personOptions: [],
+            tempAttendees:[]
         }
     },
     setup() {
@@ -257,16 +258,17 @@ export default defineComponent({
             const url = 'http://127.0.0.1:8000/meeting/'
             if (info) {
                 const token = JSON.parse(info).token
-                this.model.attendees = [
-                    {
-                        "person_id": 6,
+                for (let i = 0; i < this.tempAttendees.length; i++){
+                    this.model.attendees[i] = {
+                        "person_id": this.tempAttendees[i],
                         "is_present": true,
-                        "is_confirmed": false,
-                        "is_member": true,
+                        "is_confirmed": true,
+                        "is_member": true
                     }
-                ]
-                this.model["chair_speech"] = "nooooooo"
+                }
+                this.model["chair_speech"] = ""
                 this.model["chair_confirmed"] = true
+                this.model["is_draft"] = false
                 console.log('showwwwww', this.model)
                 await axios({
                     method: 'post',
@@ -309,10 +311,12 @@ export default defineComponent({
                 .then((response)=>{
                     console.log('success', response)
                     this.attendees = response.data
+
                     for (var i = 0; i < response.data.length; i++) {
-                        allPersonName.push(response.data[i].name);
+                        allPersonName.push({name: response.data[i].name, id: response.data[i].id});
                     }
                     this.personOptions = allPersonName
+
                     console.log('allPersonName:', this.personOptions)
                 })
             }
