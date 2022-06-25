@@ -108,7 +108,7 @@
                         {{ item.content }}
                     </n-descriptions-item>
                     <n-descriptions-item label="主席">
-                        {{ allPersonNames[meeting.chair_id - 1] }}
+                        {{ getName(meeting.chair_id) }}
                     </n-descriptions-item>
                     <n-descriptions-item label="決策">
                         {{ item.resolution }}
