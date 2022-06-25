@@ -25,14 +25,14 @@
             <n-descriptions-item label="主席">
                 <router-link :to="`/member/${meeting.chair_id}`" style="text-decoration:none;">
                     <n-button type="warning" dashed circle>
-                        {{ allPersonNames[meeting.chair_id - 1] }}
+                        {{ getName(meeting.chair_id) }}
                     </n-button>
                 </router-link>
             </n-descriptions-item>
             <n-descriptions-item label="紀錄">
                 <router-link :to="`/member/${meeting.minute_taker_id}`" style="text-decoration:none;">
                     <n-button type="success" dashed circle>
-                        {{ allPersonNames[meeting.minute_taker_id - 1] }}
+                        {{ getName(meeting.minute_taker_id) }}
                     </n-button>
                 </router-link>
             </n-descriptions-item>
@@ -64,14 +64,14 @@
                     span="4 400:3 600:2 800:1">
                     <router-link v-if="item.is_present" :to="`/member/${item.person_id}`" style="text-decoration:none;">
                         <n-button type="info" dashed size="small" round>
-                            {{ allPersonNames[item.person_id - 1] }}
+                            {{ getName(item.person_id) }}
                         </n-button>
                     </router-link>
 
                     <router-link v-if="!item.is_present" :to="`/member/${item.person_id}`"
                         style="text-decoration:none;">
                         <n-button type="error" dashed size="small" round>
-                            {{ allPersonNames[item.person_id - 1] }}
+                            {{ getName(item.person_id) }}
                         </n-button>
                     </router-link>
                 </n-grid-item>
@@ -227,6 +227,14 @@ export default defineComponent({
         }
     },
     methods: {
+        getName(id){
+            console.log('iddddd', id)
+            for (let i = 0; i < this.allPersonNames.length; i++){
+                if (this.allPersonNames[i].id == id){
+                    return this.allPersonNames[i].name
+                }
+            }
+        },
         async getMeet(id) {
             // 獲取Cookies當中的login資訊並取得token
             const info = Cookies.get('login')
@@ -243,6 +251,7 @@ export default defineComponent({
                     },
                 })
                     .then((response) => {
+                        console.log('contenttt', response.data)
                         return response.data
                     })
             }
@@ -266,10 +275,10 @@ export default defineComponent({
                         console.log('success', response)
                         this.attendees = response.data
                         for (var i = 0; i < response.data.length; i++) {
-                            allPersonName.push(response.data[i].name);
+                            allPersonName.push({name: response.data[i].name, id: response.data[i].id});
                         }
                         this.allPersonNames = allPersonName
-                        console.log('allPersonName:', this.personOptions)
+                        console.log('allPersonName:', this.allPersonNames)
                     })
             }
         },
