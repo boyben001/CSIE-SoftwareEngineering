@@ -43,7 +43,7 @@
             <n-select v-model:value="model.minute_taker_id" placeholder="選擇一項" :options="personOptions" />
         </n-form-item>
         <n-form-item label="與會人員" path="attendees">
-            <n-select v-model:value="model.attendees" placeholder="選擇多項" :options="personOptions" multiple />
+            <n-select v-model:value="tempAttendees" placeholder="選擇多項" :options="personOptions" multiple />
         </n-form-item>
 
         <n-divider />
@@ -181,8 +181,8 @@
             </n-upload>
         </n-form-item>
 
-        <n-button type="success" @click="createMeet">
-            確定新增會議
+        <n-button type="success" @click="methods.handleValidateClick">
+            確定編輯會議
         </n-button>
     </n-form>
 
@@ -190,34 +190,38 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, onMounted} from "vue";
 import { ArchiveOutline as ArchiveIcon } from "@vicons/ionicons5";
 import modelForm from './AddMeeting/model.js'
 import rules from './AddMeeting/rules.js'
-
+import { useMessage } from "naive-ui"
 import Cookies from 'js-cookie'
 import axios from 'axios'
+import { useRoute } from 'vue-router'
+import moment from 'moment'
 
 import { meetingTypeOptions, statusOptions } from './AddMeeting/options.js'
 export default defineComponent({
     components: {
         ArchiveIcon
     },
-    async mounted() {
-        await this.getAllPerson()
-        this.personOptions = this.personOptions.map((v, i) => ({
-            label: v,
-            value: i + 1
-        }));
-    },
-    data() {
-        return {
-            personOptions: []
-        }
-    },
     setup() {
         const formRef = ref(null);
         const model = reactive(modelForm);
+        const message = useMessage();
+        const route = useRoute()
+        const meetingId = route.params.meetingId
+        const tempAttendees = ref([])
+        const personOptions = ref([])
+
+        onMounted(async () => {
+            await methods.getMeet(meetingId)
+            await methods.getAllPerson()
+            personOptions.value = personOptions.value.map((v, i) => ({
+                label: personOptions.value[i].name,
+                value: personOptions.value[i].id
+            }));
+        })
 
         const removeAnnouncement = (index) => {
             model.announcements.splice(index, 1)
@@ -243,13 +247,155 @@ export default defineComponent({
             model.motions.push({ content: '' })
         }
 
+        const methods = {
+            async getAllPerson() {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                let allPersonName = []
+                if (info) {
+                    const token = JSON.parse(info).token
+                    await axios({
+                        method: 'get',
+                        url: 'http://127.0.0.1:8000/person/',
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                    })
+                        .then((response) => {
+                            console.log('success', response.data)
+                            for (var i = 0; i < response.data.length; i++) {
+                                allPersonName.push({name: response.data[i].name, id: response.data[i].id});
+                            }
+                            personOptions.value = allPersonName
+                        })
+                }
+            },
+            async getMeet(id) {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                const url = 'http://127.0.0.1:8000/meeting/' + id
+                if (info) {
+                    const token = JSON.parse(info).token
+                    return await axios({
+                        method: 'get',
+                        url: url,
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                    })
+                        .then((response) => {
+                            model.title = response.data.title
+                            model.time = moment(response.data.time).valueOf();
+                            model.location = response.data.location
+                            model.type = response.data.type
+                            model.chair_id = response.data.chair_id
+                            model.minute_taker_id = response.data.minute_taker_id
+                            //model.attendees = response.data.attendee_association
+                            model.announcements = response.data.announcements
+                            model.extempores = response.data.extempores
+                            model.motions = response.data.motions
+                            model["chair_speech"] = response.data.chair_speech
+                            model["chair_confirmed"] = response.data.chair_confirmed
+                            model["is_draft"] = response.data.is_draft
+
+                            for (let i = 0; i < response.data.attendee_association.length; i++){
+                                tempAttendees.value[i] = response.data.attendee_association[i].person_id
+                            }
+
+                            return response.data
+                        })
+                }
+            },
+            async editMeet(meetingId) {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                const url = 'http://127.0.0.1:8000/meeting/' + meetingId
+                if (info) {
+                    const token = JSON.parse(info).token
+                    await axios({
+                        method: 'put',
+                        url: url,
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                        data: {
+                            'request': JSON.stringify(model, null, 2),
+                            'files': []
+                        }
+                    })
+                        .then((response) => {
+                            console.log('success', response)
+                            window.location.replace('/meeting/'+ meetingId)
+                        })
+                        .catch((error) => {
+                            console.log('errorrr', error.response.data)
+                        })
+                }
+            },
+            handleValidateClick(e) {
+                e.preventDefault();
+                console.log('atttte', tempAttendees)
+                for (let i = 0; i < tempAttendees.value.length; i++){
+                    model.attendees[i] = {
+                        "person_id": tempAttendees.value[i],
+                        "is_present": true,
+                        "is_confirmed": true,
+                        "is_member": true
+                    }
+                }
+                
+                formRef.value?.validate((errors) => {
+                    if (!errors) {
+                        try {
+                            methods.editMeet(meetingId);
+                        } catch (exception) {
+                            console.log("put error")
+                        }
+                        message.success("編輯會議成功");
+                    } else {
+                        message.error("還有空格未填");
+                    }
+                });
+            },
+            async getPerson(id) {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                const url = 'http://127.0.0.1:8000/person/' + id
+                if (info) {
+                    const token = JSON.parse(info).token
+                    return await axios({
+                        method: 'get',
+                        url: url,
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                    })
+                        .then((response) => {
+                            console.log(response)
+                            return response.data
+                        })
+                }
+            }
+        }
+
         return {
             formRef,
             size: ref("medium"),
             model,
+            methods,
             meetingTypeOptions,
             statusOptions,
             rules,
+            tempAttendees,
+            personOptions,
             removeAnnouncement,
             addAnnouncement,
             removeExtempore,
@@ -257,74 +403,6 @@ export default defineComponent({
             removeMotion,
             addMotion,
         };
-    },
-    methods: {
-        async createMeet() {
-            // 獲取Cookies當中的login資訊並取得token
-            const info = Cookies.get('login')
-            const url = 'http://127.0.0.1:8000/meeting/'
-            if (info) {
-                const token = JSON.parse(info).token
-                this.model.attendees = [
-                    {
-                        "person_id": 6,
-                        "is_present": true,
-                        "is_confirmed": false,
-                        "is_member": true,
-                    }
-                ]
-                this.model["chair_speech"] = "nooooooo"
-                this.model["chair_confirmed"] = true
-                console.log('showwwwww', this.model)
-                await axios({
-                    method: 'post',
-                    url: url,
-                    headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    },
-                    data: {
-                        'request': JSON.stringify(this.model, null, 2),
-                        'files': []
-                    }
-                })
-                    .then((response) => {
-                        console.log('success', response)
-                        //this.member = response.data
-                        //console.log('members:', this.members)
-                    })
-                    .catch((error) => {
-                        console.log('errorrr', error.response.data)
-                    })
-            }
-        },
-        async getAllPerson() {
-            // 獲取Cookies當中的login資訊並取得token
-            const info = Cookies.get('login')
-            let allPersonName = []
-            if (info) {
-                const token = JSON.parse(info).token
-                await axios({
-                    method: 'get',
-                    url: 'http://127.0.0.1:8000/person/',
-                    headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-                    },
-                })
-                    .then((response) => {
-                        console.log('success', response)
-                        this.attendees = response.data
-                        for (var i = 0; i < response.data.length; i++) {
-                            allPersonName.push(response.data[i].name);
-                        }
-                        this.personOptions = allPersonName
-                        console.log('allPersonName:', this.personOptions)
-                    })
-            }
-        }
     },
 });
 </script>
