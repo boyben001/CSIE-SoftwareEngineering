@@ -50,6 +50,9 @@ export default defineComponent({
       })
     };
   },
+  mounted(){
+    this.removeCookie()
+  },
   methods: {
     async handleLogin() {
       //const token = 'asds32adsavrAS3Fadf5567' // token本身就是加密過的字串，隨意
@@ -96,7 +99,6 @@ export default defineComponent({
         alert('帳號不存在')
       }
     },
-
     // 將Cookies清除的測試用button事件
     removeCookie() {
       Cookies.remove('login')
