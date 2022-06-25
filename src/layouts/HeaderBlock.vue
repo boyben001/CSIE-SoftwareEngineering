@@ -12,8 +12,7 @@
           color: 'white',
           backgroundColor: 'purple'
         }">
-        <!-- TODO: 替換 current person name -->
-          嗨嗨
+          {{ user.name }}
         </n-avatar>
       </n-button>
 
@@ -22,7 +21,8 @@
 </template>
 
 <script>
-import { defineComponent, h } from "vue";
+import axios from 'axios';
+import { defineComponent, h, ref, onMounted } from "vue";
 import {
   PersonCircleOutline as UserIcon,
   Pencil as EditIcon,
@@ -30,6 +30,7 @@ import {
   Body as BodyIcon
 } from '@vicons/ionicons5'
 import { NIcon } from "naive-ui";
+import Cookies from 'js-cookie';
 
 const renderIcon = (icon) => {
   return () => {
@@ -39,45 +40,95 @@ const renderIcon = (icon) => {
   };
 };
 
-// TODO: 把串接處理
-const options = [
-  {
-    label: "👋 你好 嗨嗨",
-    key: "header",
-    type: "title",
-    icon: renderIcon(BodyIcon),
-  },
-  {
-    key: "header-divider",
-    type: "divider",
-  },
-  {
-    label: "個人資料",
-    key: "person_data",
-    icon: renderIcon(UserIcon),
-    // person_id
-    url: "/member/3"
-  },
-  {
-    label: "編輯個人資料",
-    key: "edit_person_data",
-    icon: renderIcon(EditIcon),
-    // edit-person/person_id
-    url: "/member/3"
-  },
-  {
-    // TODO: token 需要清空
-    label: "登出",
-    key: "logout",
-    icon: renderIcon(LogoutIcon),
-    url: "/login"
-  }
-]
+
 
 export default defineComponent({
   setup() {
+
+    const info = Cookies.get('login')
+    const mail = JSON.parse(info).usermail
+    const personOptions = ref([])
+    const user = ref({})
+
+    // TODO: 把串接處理
+    const options = ref([]) 
+
+    onMounted(async () => {
+      await methods.getAllPerson()
+      await getCurrentUser()
+      options.value = [
+      {
+        label: "👋 你好 " + user.value.name,
+        key: "header",
+        type: "title",
+        icon: renderIcon(BodyIcon),
+      },
+      {
+        key: "header-divider",
+        type: "divider",
+      },
+      {
+        label: "個人資料",
+        key: "person_data",
+        icon: renderIcon(UserIcon),
+        url: "/member/" + user.value.id
+      },
+      {
+        label: "編輯個人資料",
+        key: "edit_person_data",
+        icon: renderIcon(EditIcon),
+        url: "/edit-person/" + user.value.id
+      },
+      {
+        // TODO: token 需要清空
+        label: "登出",
+        key: "logout",
+        icon: renderIcon(LogoutIcon),
+        url: "/login"
+      }
+    ]
+    })
+
+    const getCurrentUser = () => {
+      for (let i = 0; i < personOptions.value.length; i++){
+        if (personOptions.value[i].email == mail){
+            user.value = personOptions.value[i]
+        }
+      }
+    }
+
+    const methods = {
+            async getAllPerson() {
+                // 獲取Cookies當中的login資訊並取得token
+                const info = Cookies.get('login')
+                let allPersonName = []
+                if (info) {
+                    const token = JSON.parse(info).token
+                    await axios({
+                        method: 'get',
+                        url: 'http://127.0.0.1:8000/person/',
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                            'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                        },
+                    })
+                        .then((response) => {
+                            console.log('success', response.data)
+                            for (var i = 0; i < response.data.length; i++) {
+                                allPersonName.push({name: response.data[i].name, email: response.data[i].email, id: response.data[i].id});
+                            }
+                            personOptions.value = allPersonName
+                        })
+                }
+            },
+    }
+
     return {
       options,
+      user,
+      getCurrentUser,
+      methods,
       renderDropdownLabel(option) {
         if (option.type === "title") {
           return option.label;
