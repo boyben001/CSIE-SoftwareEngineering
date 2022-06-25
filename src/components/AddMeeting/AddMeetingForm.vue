@@ -156,7 +156,7 @@
         <n-h2>上傳檔案</n-h2>
         <n-form-item path="uploadValue">
             <!-- TODO: action 為上傳的位置 -->
-            <n-upload multiple directory-dnd action="" :max="5">
+            <n-upload multiple directory-dnd action="" :max="5" v-model:file-list="fileList">
                 <n-upload-dragger>
                     <div style="margin-bottom: 12px">
                         <n-icon size="48" :depth="3">
@@ -189,7 +189,6 @@ import rules from './rules.js'
 
 import Cookies from 'js-cookie'
 import axios from 'axios'
-
 import {meetingTypeOptions, statusOptions} from './options.js'
 export default defineComponent({
     components: {
@@ -211,6 +210,7 @@ export default defineComponent({
     setup() {
         const formRef = ref(null);
         const model = reactive(modelForm);
+        const fileListRef = ref([])
 
         const removeAnnouncement = (index) => {
             model.announcements.splice(index, 1)
@@ -249,11 +249,13 @@ export default defineComponent({
             addExtempore,
             removeMotion,
             addMotion,
+            fileList: fileListRef
         };
     },
     methods: {
         async createMeet() {
             // 獲取Cookies當中的login資訊並取得token
+            console.log('fileeee', this.fileList)
             const info = Cookies.get('login')
             const url = 'http://127.0.0.1:8000/meeting/'
             if (info) {
@@ -269,7 +271,6 @@ export default defineComponent({
                 this.model["chair_speech"] = ""
                 this.model["chair_confirmed"] = true
                 this.model["is_draft"] = false
-                console.log('showwwwww', this.model)
                 await axios({
                     method: 'post',
                     url: url,
@@ -280,13 +281,12 @@ export default defineComponent({
                     },
                     data: {
                         'request': JSON.stringify(this.model, null, 2),
-                        'files': []
+                        'files': this.fileList
                     }
                 })
                     .then((response) => {
                         console.log('success', response)
-                        //this.member = response.data
-                        //console.log('members:', this.members)
+                        window.location.replace('/meeting/'+ response.data.id)
                     })
                     .catch((error) => {
                         console.log('errorrr', error.response.data)
