@@ -131,7 +131,6 @@ export default defineComponent({
                         },
                     })
                         .then((response) => {
-                            console.log('success', response.data)
                             for (var i = 0; i < response.data.length; i++) {
                                 allPersonName.push({name: response.data[i].name, id: response.data[i].id});
                             }
@@ -162,7 +161,6 @@ export default defineComponent({
                         },
                     })
                         .then((response) => {
-                            console.log('success', response.data)
                             for (var i = 0; i < response.data.length; i++) {
                                 if (response.data[i].is_draft == true){
                                     draft_data.value.push({
@@ -204,8 +202,7 @@ export default defineComponent({
                             'files': []
                         }
                     })
-                        .then((response) => {
-                            console.log('success', response)
+                        .then(() => {
                             draft_data.value.splice(index, 1)
                             archive_data.value.push({
                                 id: model.id, 
@@ -218,7 +215,11 @@ export default defineComponent({
                         })
                         .catch((error) => {
                             console.log('errorrr', error.response.data)
-                            message.info('封存失敗，資料未填妥')
+                            if (error.response.data == undefined){
+                                message.error('封存失敗，資料未填妥')
+                            }else if (error.response.data.detail == "You have no authorization to update meetings"){
+                                message.warning('權限不足')
+                            }
                         })
                 }
             },
@@ -241,7 +242,6 @@ export default defineComponent({
                             const model = response.data
                             model.is_draft = false
                             model['attendees'] = response.data.attendee_association
-                            console.log('sucesssss2222', model)
                             methods.editMeet(id, model)
                         })
                 }

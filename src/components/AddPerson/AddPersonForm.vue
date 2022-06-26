@@ -148,12 +148,17 @@ export default defineComponent({
                         },
                         data: JSON.stringify(model, null, 2)
                     })
-                        .then((response) => {
-                            console.log('success', response.data.id)
+                        .then(async (response) => {
+                            await message.success("新增人員成功");
                             window.location.replace('/member/'+response.data.id)
                         })
                         .catch((error) => {
                             console.log('errorrr', error.response.data)
+                            if (error.response.data == undefined){
+                                message.error("新增人員失敗");
+                            }else if (error.response.data.detail == "You have no authorization to create person"){
+                                message.warning("權限不足");
+                            }
                         })
                 }
             },
@@ -166,7 +171,6 @@ export default defineComponent({
                         } catch (exception) {
                             console.log("post error")
                         }
-                        message.success("新增人員成功");
                     } else {
                         message.error("還有空格未填");
                     }
