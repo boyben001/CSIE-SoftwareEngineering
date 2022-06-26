@@ -200,27 +200,101 @@ export default defineComponent({
         };
 
         // 寄送通知
-        const handleNoticeClick = () => {
+        const handleNoticeClick = async () => {
             loadingNoticeRef.value = true
-            setTimeout(() => {
-                loadingNoticeRef.value = false;
-                notification.info({
-                    title: "會議通知已送出",
-                    duration: 3000,
-                });
-            }, 2000)
+            // setTimeout(() => {
+            //     loadingNoticeRef.value = false;
+            //     notification.info({
+            //         title: "會議通知已送出",
+            //         duration: 3000,
+            //     });
+            // }, 2000)
+
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            if (info) {
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'get',
+                    url: 'http://127.0.0.1:8000/email/SendMeetingNotice/' + route.params.meetingId,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                })
+                    .then(() => {
+                        loadingNoticeRef.value = false
+                        notification.info({
+                            title: "會議通知已送出",
+                            duration: 3000,
+                        })
+                    })
+                    .catch((error) => {
+                        loadingNoticeRef.value = false
+                        console.log('errorrr', error.response.data)
+                        if (error.response.data == undefined){
+                            notification.info({
+                                title: "email 有誤，會議結果送出失敗",
+                                duration: 3000,
+                            })
+                        }else if (error.response.data.detail == "You have no authorization to get meetings"){
+                            notification.info({
+                                title: "權限不足",
+                                duration: 3000,
+                            })
+                        }
+                    })
+            }
         };
 
         // 寄送結果
-        const handleResultClick = () => {
+        const handleResultClick = async() => {
             loadingResultRef.value = true
-            setTimeout(() => {
-                loadingResultRef.value = false;
-                notification.success({
-                    title: "會議結果已送出",
-                    duration: 3000,
-                });
-            }, 2000)
+            // setTimeout(() => {
+            //     loadingResultRef.value = false;
+            //     notification.success({
+            //         title: "會議結果已送出",
+            //         duration: 3000,
+            //     });
+            // }, 2000)
+
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            if (info) {
+                const token = JSON.parse(info).token
+                await axios({
+                    method: 'get',
+                    url: 'http://127.0.0.1:8000/email/SendMeetingResult/' + route.params.meetingId,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                })
+                    .then(() => {
+                        loadingResultRef.value = false
+                        notification.info({
+                            title: "會議結果已送出",
+                            duration: 3000,
+                        })
+                    })
+                    .catch((error) => {
+                        loadingResultRef.value = false
+                        console.log('errorrr', error.response.data)
+                        if (error.response.data == undefined){
+                            notification.info({
+                                title: "email 有誤，會議結果送出失敗",
+                                duration: 3000,
+                            })
+                        }else if (error.response.data.detail == "You have no authorization to get meetings"){
+                            notification.info({
+                                title: "權限不足",
+                                duration: 3000,
+                            })
+                        }
+                    })
+            }
         };
 
         return {

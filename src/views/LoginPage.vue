@@ -46,7 +46,6 @@ export default defineComponent({
   },
   methods: {
     async handleLogin() {
-      //const token = 'asds32adsavrAS3Fadf5567' // token本身就是加密過的字串，隨意
       let usermail = this.value
 
       await axios({
@@ -77,7 +76,7 @@ export default defineComponent({
       }
 
       var date = new Date();
-      date.setTime(date.getTime() + (10 * 60 * 1000)); //十分鐘後 cookie 會過期
+      date.setTime(date.getTime() + (60 * 60 * 1000)); //六十分鐘後 cookie 會過期
       console.log(date)
 
       Cookies.set('login', JSON.stringify(this.loginForm), { expires: date })
