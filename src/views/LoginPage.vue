@@ -7,7 +7,7 @@
     <n-card size="large" style="width:25vw">
       <n-auto-complete v-model:value="value" :input-props="{
         autocomplete: 'disabled'
-      }" :options="options" placeholder="Email" />
+      }" placeholder="Email" />
       <n-button tertiary type="primary" @click="handleLogin">
         登入
       </n-button>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref } from "vue";
 import { NButton } from 'naive-ui'
 import Cookies from 'js-cookie'
 import axios from 'axios'
@@ -39,15 +39,6 @@ export default defineComponent({
     const valueRef = ref("");
     return {
       value: valueRef,
-      options: computed(() => {
-        return ["@admin", "@gmail.com", "@yahooo.com.tw", "@mail.nuk.edu.tw"].map((suffix) => {
-          const prefix = valueRef.value.split("@")[0];
-          return {
-            label: prefix + suffix,
-            value: prefix + suffix
-          };
-        });
-      })
     };
   },
   mounted(){
