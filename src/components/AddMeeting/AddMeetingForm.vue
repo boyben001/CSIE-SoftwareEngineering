@@ -268,7 +268,7 @@ export default defineComponent({
                         "is_member": true
                     }
                 }
-                this.model["chair_speech"] = ""
+                this.model["chair_speech"] = "none"
                 this.model["chair_confirmed"] = true
                 this.model["is_draft"] = true
                 await axios({
