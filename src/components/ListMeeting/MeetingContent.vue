@@ -141,6 +141,7 @@ import {
 } from '@vicons/ionicons5'
 import { useMessage, useDialog, useNotification } from 'naive-ui'
 import moment from 'moment'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
     name: "MeetingContent",
@@ -154,6 +155,33 @@ export default defineComponent({
         const loadingNoticeRef = ref(false)
         const loadingResultRef = ref(false)
         const notification = useNotification()
+        const route = useRoute()
+
+        const deleteMeeting = (id) => {
+            // 獲取Cookies當中的login資訊並取得token
+            const info = Cookies.get('login')
+            const url = 'http://127.0.0.1:8000/meeting/' + id
+            if (info) {
+                const token = JSON.parse(info).token
+                axios({
+                    method: 'delete',
+                    url: url,
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
+                    },
+                })
+                    .then(async () => {
+                        await message.success('已刪除')
+                        window.location.replace('/meeting/')
+                    })
+                    .catch((error) => {
+                        message.success('error!! 刪除失敗')
+                        console.log('errorrr', error.response.data)
+                    })
+            }
+        }
 
         const handleError = () => {
             dialog.warning({
@@ -168,8 +196,8 @@ export default defineComponent({
                 onPositiveClick: () => {
                     message.info('取消')
                 },
-                onNegativeClick: () => {
-                    message.success('已刪除')
+                onNegativeClick: async () => {
+                    deleteMeeting(route.params.meetingId)
                 }
             })
         };
@@ -204,6 +232,7 @@ export default defineComponent({
             handleResultClick,
             loadingNoticeRef,
             loadingResultRef,
+            deleteMeeting
         }
     },
     async mounted() {
@@ -228,7 +257,6 @@ export default defineComponent({
     },
     methods: {
         getName(id){
-            console.log('iddddd', id)
             for (let i = 0; i < this.allPersonNames.length; i++){
                 if (this.allPersonNames[i].id == id){
                     return this.allPersonNames[i].name
@@ -251,7 +279,6 @@ export default defineComponent({
                     },
                 })
                     .then((response) => {
-                        console.log('contenttt', response.data)
                         return response.data
                     })
             }
@@ -272,13 +299,11 @@ export default defineComponent({
                     },
                 })
                     .then((response) => {
-                        console.log('success', response)
                         this.attendees = response.data
                         for (var i = 0; i < response.data.length; i++) {
                             allPersonName.push({name: response.data[i].name, id: response.data[i].id});
                         }
                         this.allPersonNames = allPersonName
-                        console.log('allPersonName:', this.allPersonNames)
                     })
             }
         },
