@@ -24,7 +24,7 @@ export default {
     name: "MeetingSidebar",
     data() {
         return {
-            meets: [{}]
+            meets: []
         };
     },
     methods: {
@@ -43,7 +43,14 @@ export default {
                     },
                 })
                     .then((response) => {
-                        this.meets = response.data;
+                        for (var i = 0; i < response.data.length; i++){
+                            if (response.data[i].is_draft == true){
+                                this.meets.push(response.data[i])
+                                console.log('aaa', i)
+                                console.log('daa', this.meets)
+                            }
+                        }
+                        console.log('datttaaaa', this.meets)
                     })
             }
         },

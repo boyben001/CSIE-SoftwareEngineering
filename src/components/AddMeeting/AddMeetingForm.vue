@@ -270,7 +270,7 @@ export default defineComponent({
                 }
                 this.model["chair_speech"] = ""
                 this.model["chair_confirmed"] = true
-                this.model["is_draft"] = false
+                this.model["is_draft"] = true
                 await axios({
                     method: 'post',
                     url: url,
