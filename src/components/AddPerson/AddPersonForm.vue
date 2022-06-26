@@ -45,7 +45,7 @@
         </n-space>
 
         <n-space v-if="model.type == '校外教師'" vertical>
-            <n-form-item label="學校名稱" path="other_prof_info.job_title">
+            <n-form-item label="學校名稱" path="other_prof_info.univ_name">
                 <n-input v-model:value="model.other_prof_info.univ_name" placeholder="" maxlength="30" show-count
                     clearable />
             </n-form-item>
