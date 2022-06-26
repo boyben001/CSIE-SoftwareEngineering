@@ -91,34 +91,6 @@ export default defineComponent({
         const message = useMessage()
         const dialog = useDialog()
         const route = useRoute()
-        // const person = ref({})
-
-        // onMounted(async()=> {
-        //     person.value = await getPerson(route.params.personId)
-        //     console.log('iddddd', person.value.name)
-        // })
-
-        // const getPerson = async(id) => {
-        //     // 獲取Cookies當中的login資訊並取得token
-        //     const info = Cookies.get('login')
-        //     const url = 'http://127.0.0.1:8000/person/' + id
-        //     if (info) {
-        //         const token = JSON.parse(info).token
-        //         return await axios({
-        //             method: 'get',
-        //             url: url,
-        //             headers: {
-        //                 accept: 'application/json',
-        //                 'Content-Type': 'multipart/form-data',
-        //                 'Authorization': `Bearer ${token}` // Bearer 跟 token 中間有一個空格
-        //             },
-        //         })
-        //             .then((response) => {
-        //                 console.log(response)
-        //                 return response.data
-        //             })
-        //     }
-        // }
 
         const deletePerson = (id) => {
             // 獲取Cookies當中的login資訊並取得token

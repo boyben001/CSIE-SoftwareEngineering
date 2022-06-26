@@ -115,31 +115,19 @@
                 }">
                     <n-select v-model:value="item.status" placeholder="選擇一項" :options="statusOptions" />
                 </n-form-item>
-                <n-form-item :label="`內容`" :path="`motions[${index}].content`" :rule="{
-                    required: true,
-                    message: `內容不得為空`,
-                    trigger: ['input', 'blur']
-                }">
+                <n-form-item :label="`內容`" :path="`motions[${index}].content`">
                     <n-input v-model:value="item.content" placeholder="內容文字" type="textarea" :autosize="{
                         minRows: 3,
                         maxRows: 5
                     }" clearable />
                 </n-form-item>
-                <n-form-item :label="`決策`" :path="`motions[${index}].resolution`" :rule="{
-                    required: true,
-                    message: `決策不得為空`,
-                    trigger: ['input', 'blur']
-                }">
+                <n-form-item :label="`決策`" :path="`motions[${index}].resolution`">
                     <n-input v-model:value="item.resolution" placeholder="內容文字" type="textarea" :autosize="{
                         minRows: 3,
                         maxRows: 5
                     }" clearable />
                 </n-form-item>
-                <n-form-item :label="`執行`" :path="`motions[${index}].execution`" :rule="{
-                    required: true,
-                    message: `執行不得為空`,
-                    trigger: ['input', 'blur']
-                }">
+                <n-form-item :label="`執行`" :path="`motions[${index}].execution`">
                     <n-input v-model:value="item.execution" placeholder="內容文字" type="textarea" :autosize="{
                         minRows: 3,
                         maxRows: 5

@@ -24,14 +24,14 @@
             </n-descriptions-item>
             <n-descriptions-item label="主席">
                 <router-link :to="`/member/${meeting.chair_id}`" style="text-decoration:none;">
-                    <n-button type="warning" dashed circle>
+                    <n-button v-if="meeting.chair_id != null" type="warning" dashed circle>
                         {{ getName(meeting.chair_id) }}
                     </n-button>
                 </router-link>
             </n-descriptions-item>
             <n-descriptions-item label="紀錄">
                 <router-link :to="`/member/${meeting.minute_taker_id}`" style="text-decoration:none;">
-                    <n-button type="success" dashed circle>
+                    <n-button v-if="meeting.minute_taker_id != null" type="success" dashed circle>
                         {{ getName(meeting.minute_taker_id) }}
                     </n-button>
                 </router-link>
@@ -106,9 +106,6 @@
                     </n-descriptions-item>
                     <n-descriptions-item label="內容">
                         {{ item.content }}
-                    </n-descriptions-item>
-                    <n-descriptions-item label="主席">
-                        {{ getName(meeting.chair_id) }}
                     </n-descriptions-item>
                     <n-descriptions-item label="決策">
                         {{ item.resolution }}

@@ -31,12 +31,6 @@ const rules = {
         required: true,
         trigger: ["blur", "change"],
         message: "必須要有紀錄"
-    },
-    attendees: {
-        type: "array",
-        required: true,
-        trigger: ["blur", "change"],
-        message: "必須要有與會人員"
     }
 }
 
